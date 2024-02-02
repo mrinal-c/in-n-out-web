@@ -1,5 +1,6 @@
 import { ExpensesView } from "./ExpensesView";
 import { addQueryParams } from "../utils";
+import { Suspense } from "react";
 
 export default function View() {
   const sortTransactions = (transactions) => {
@@ -9,7 +10,7 @@ export default function View() {
   };
 
   const fetchTransactions = async (month, user) => {
-    'use server'
+    "use server";
     let params = {
       month: month,
       uid: user.uid,
@@ -28,7 +29,9 @@ export default function View() {
   };
   return (
     <div>
-      <ExpensesView fetchTransactions={fetchTransactions}/>
+      <Suspense>
+        <ExpensesView fetchTransactions={fetchTransactions} />
+      </Suspense>
     </div>
   );
 }
