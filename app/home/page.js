@@ -53,7 +53,6 @@ export default function Home() {
       month: month,
       uid: user.uid,
     };
-    console.log(transaction)
     let url = addQueryParams(`${process.env.APP_URL}/transaction`, query);
     let response = await fetch(url, {
       method: "POST",

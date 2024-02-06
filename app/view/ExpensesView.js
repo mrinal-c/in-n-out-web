@@ -29,6 +29,8 @@ export function ExpensesView({ fetchTransactions }) {
 
   const getTransactions = async () => {
     const data = await fetchTransactions(searchParams.get("month"), user);
+    //sort transactions by transactions.date
+    data.sort((a, b) => new Date(b.date) - new Date(a.date));
     setTransactions(data);
   };
 
