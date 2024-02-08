@@ -32,3 +32,10 @@ export async function login(email, password) {
     })
     .catch((err) => console.log(err));
 }
+
+export async function wakeUpServer() {
+  'use server'
+  fetch(`${process.env.APP_URL}/wakeup`, {
+    method: "GET",
+  });
+}
