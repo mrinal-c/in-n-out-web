@@ -1,9 +1,9 @@
-'use server'
+"use server";
 
 import { redirect } from "next/navigation";
 
 export async function login(email, password) {
-  'use server'
+  "use server";
   if (email == null || password == null) {
     console.log("email or password is null");
     redirect("/login");
@@ -24,7 +24,7 @@ export async function login(email, password) {
     .then((data) => {
       if (data.status == "SUCCESS") {
         console.log("Login successful");
-        redirect("/home")
+        redirect("/home");
       } else if (data.status == "FAILURE") {
         console.log("Login failed");
         redirect("/login");
@@ -34,8 +34,13 @@ export async function login(email, password) {
 }
 
 export async function wakeUpServer() {
-  'use server'
-  fetch(`${process.env.APP_URL}/wakeup`, {
-    method: "GET",
-  });
+  "use server";
+  const { signal } = new AbortController();
+  await fetch(
+    `${process.env.APP_URL}/wakeUp`,
+    {
+      method: "GET",
+    },
+    { signal }
+  );
 }

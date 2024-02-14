@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from "react";
 import {
   Modal,
-  Backdrop,
+  MenuItem,
   Fade,
   Button,
   TextField,
   FormControl,
   InputLabel,
-  InputAdornment,
+  Select,
   IconButton,
 } from "@mui/material";
 
@@ -19,11 +19,28 @@ import dayjs from "dayjs";
 import { Close } from "@mui/icons-material";
 
 export function TransactionModal({ open, handleClose, handleSubmit }) {
-  const [transactionData, setTransactionData] = useState({});
+  const [transactionData, setTransactionData] = useState({payment: "AMEX Card", type: "Personal"});
   const [date, setDate] = useState(dayjs());
 
+  const payments = [
+    { label: "Cash", value: "Cash", key: "Cash" },
+    { label: "AMEX Card", value: "AMEX Card", key: "AMEX Card" },
+    { label: "Citi Card", value: "Citi Card", key: "Citi Card" },
+    { label: "Debit Card", value: "Debit Card", key: "Debit Card" },
+    { label: "Venmo", value: "Venmo", key: "Venmo" },
+  ];
+  const types = [
+    { label: "Personal", value: "Personal", key: "Personal" },
+    { label: "Breakfast", value: "Breakfast", key: "Breakfast" },
+    { label: "Lunch", value: "Lunch", key: "Lunch" },
+    { label: "Dinner", value: "Dinner", key: "Dinner" },
+    { label: "Big Ticket", value: "Big Ticket", key: "Big Ticket" },
+    { label: "Groceries", value: "Groceries", key: "Groceries" },
+    { label: "Travel", value: "Travel", key: "Travel" },
+  ];
+
   const handleDateChange = (newDate) => {
-    setDate(newDate)
+    setDate(newDate);
   };
 
   const handleChange = (event) => {
@@ -47,11 +64,7 @@ export function TransactionModal({ open, handleClose, handleSubmit }) {
           </div>
 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Date"
-              value={date}
-              onChange={handleDateChange}
-            />
+            <DatePicker label="Date" value={date} onChange={handleDateChange} />
           </LocalizationProvider>
 
           <TextField
@@ -62,21 +75,37 @@ export function TransactionModal({ open, handleClose, handleSubmit }) {
             onChange={handleChange}
           />
 
-          <TextField
-            label="Type"
-            name="type"
-            fullWidth
-            margin="normal"
-            onChange={handleChange}
-          />
+          <FormControl fullWidth className="mt-2">
+            <InputLabel id="type-dropdown-label">Type</InputLabel>
+            <Select
+              value={transactionData.type}
+              label="Type"
+              name="type"
+              onChange={handleChange}
+            >
+              {types.map((type) => (
+                <MenuItem key={type.key} value={type.value}>
+                  {type.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-          <TextField
-            label="Payment"
-            name="payment"
-            fullWidth
-            margin="normal"
-            onChange={handleChange}
-          />
+          <FormControl fullWidth className="mt-5">
+            <InputLabel id="payment-dropdown-label">Payment</InputLabel>
+            <Select
+              value={transactionData.payment}
+              label="Payment"
+              name="payment"
+              onChange={handleChange}
+            >
+              {payments.map((payment) => (
+                <MenuItem key={payment.key} value={payment.value}>
+                  {payment.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
           <FormControl fullWidth margin="normal">
             <TextField
@@ -93,8 +122,8 @@ export function TransactionModal({ open, handleClose, handleSubmit }) {
               variant="contained"
               color="primary"
               onClick={() => {
-                transactionData.date = date.format('YYYY-MM-DD')
-                handleSubmit(transactionData)
+                transactionData.date = date.format("YYYY-MM-DD");
+                handleSubmit(transactionData);
               }}
             >
               Submit
