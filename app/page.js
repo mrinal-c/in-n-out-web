@@ -23,14 +23,13 @@ export default function Splash() {
     console.log("verifying login");
     let email = secureLocalStorage.getItem("email");
     let password = secureLocalStorage.getItem("password");
-
-    console.log("email: ", email);
-    console.log("password", password);
+    let user = typeof window !== 'undefined' ? localStorage.getItem("user") : null;
 
     secureLocalStorage.removeItem("email");
     secureLocalStorage.removeItem("password");
+    localStorage.removeItem("user");
 
-    login(email, password);
+    login(email, password, user);
   };
 
   return (

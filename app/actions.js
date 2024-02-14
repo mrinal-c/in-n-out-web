@@ -2,9 +2,9 @@
 
 import { redirect } from "next/navigation";
 
-export async function login(email, password) {
+export async function login(email, password, user) {
   "use server";
-  if (email == null || password == null) {
+  if (email == null || password == null || user == null) {
     console.log("email or password is null");
     redirect("/login");
   }
