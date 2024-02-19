@@ -3,6 +3,7 @@ import { AuthInput } from "./AuthInput";
 export default function Login() {
   async function handleLogin(email, password) {
     "use server";
+    console.log("email: ", email);
     let response = await fetch(`${process.env.APP_URL}/login`, {
       method: "POST",
       headers: {
