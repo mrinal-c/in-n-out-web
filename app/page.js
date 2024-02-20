@@ -1,66 +1,79 @@
-"use client";
+import { OutView } from "./components/OutView";
+import { addQueryParams } from "./utils";
 
-import { CircularProgress, Modal } from "@mui/material";
-import secureLocalStorage from "react-secure-storage";
-import { useEffect, useState } from "react";
-import { login, wakeUpServer } from "./actions";
+export default function Home() {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
-export default function Splash() {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    setup();
-  }, []);
+  const fetchData = async (month, user) => {
+    "use server";
+    let params = {
+      month: month,
+      uid: user?.uid,
+    };
 
-  const setup = async () => {
-    console.log("setting up");
-    setLoading(true);
-    await wakeUpServer()
-    setLoading(false);
-    verifyLogin();
+    let url = addQueryParams(`${process.env.APP_URL}/tableData`, params);
+    let response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        accesstoken: user?.accessToken,
+      },
+    });
+    let data = await response.json();
+    return data.tableData;
   };
 
-  const verifyLogin = async () => {
-    console.log("verifying login");
-    let email = secureLocalStorage.getItem("email");
-    let password = secureLocalStorage.getItem("password");
-    let user = typeof window !== 'undefined' ? localStorage.getItem("user") : null;
+  const changeYear = async (newYear, user) => {
+    "use server";
+    await fetch(`${process.env.APP_URL}/changeYear?year=${newYear}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        accesstoken: user?.accessToken,
+      },
+    });
+  };
 
-    secureLocalStorage.removeItem("email");
-    secureLocalStorage.removeItem("password");
-    localStorage.removeItem("user");
-
-    login(email, password, user);
+  const addOut = async (transaction, user, month) => {
+    'use server'
+    let query = {
+      month: month,
+      uid: user?.uid,
+    };
+    let url = addQueryParams(`${process.env.APP_URL}/transaction`, query);
+    let response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        accesstoken: user?.accessToken,
+      },
+      body: JSON.stringify(transaction),
+    });
+    return response.status == 200;
   };
 
   return (
-    <div className="mt-20 flex justify-center">
-      <Modal
-        open={loading}
-        style={{
-          overlay: {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          },
-          content: {
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            marginRight: "-50%",
-            transform: "translate(-50%, -50%)",
-          },
-        }}
-      >
-        <div className="text-center">
-          <h2 className="text-xl font-bold mb-4">
-            Please wait while the server gets ready
-          </h2>
-          <div>
-            <CircularProgress />
-          </div>
-        </div>
-      </Modal>
+    <div>
+      <OutView
+        defaultMonth={months[new Date().getMonth()]}
+        defaultYear={new Date().getFullYear().toString()}
+        getTableData={fetchData}
+        changeYear={changeYear}
+        addOut={addOut}
+      />
     </div>
   );
 }
