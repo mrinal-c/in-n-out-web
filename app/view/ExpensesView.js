@@ -12,16 +12,21 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
+import { useSession, signIn } from "next-auth/react";
 
 export function ExpensesView({ fetchTransactions }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
-  let user =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("user"))
-      : {};
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      signIn();
+    }
+  });
+
+  const user = session?.user;
 
   useEffect(() => {
     getTransactions();
@@ -37,7 +42,7 @@ export function ExpensesView({ fetchTransactions }) {
   return (
     <Container maxWidth="sm" style={{ marginTop: "50px" }}>
       <Button
-        onClick={() => router.push("/home")}
+        onClick={() => router.push("/")}
         variant="contained"
         color="error"
       >

@@ -13,14 +13,14 @@ export default function View() {
     "use server";
     let params = {
       month: month,
-      uid: user.uid,
+      uid: user?.uid,
     };
     let url = addQueryParams(`${process.env.APP_URL}/transaction`, params);
     let response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        accesstoken: user.accessToken,
+        accesstoken: user?.accessToken,
       },
     });
 
