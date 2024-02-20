@@ -15,7 +15,7 @@ import { ExpenseTable } from "./ExpenseTable";
 import { TransactionModal } from "./TransactionModal";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 
 export function OutView({
   defaultMonth,
@@ -30,15 +30,19 @@ export function OutView({
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState({});
   const router = useRouter();
-  // let user = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("user")) : {};
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      signIn();
+    }
+  });
+
   const user = session?.user;
-  console.log(status);
 
 
   useEffect(() => {
     reload();
-  }, [month, year]);
+  }, [month, year, status]);
 
   const reload = async () => {
     setLoading(true);
