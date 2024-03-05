@@ -46,6 +46,10 @@ export function OutView({
 
   const reload = async () => {
     setLoading(true);
+    //wait for user to be defined
+    if (!user) {
+      return;
+    }
     const data = await getTableData(month, user);
     setTableData(data);
     setLoading(false);
