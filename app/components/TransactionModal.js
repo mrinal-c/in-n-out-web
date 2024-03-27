@@ -17,6 +17,8 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { Close } from "@mui/icons-material";
+//import globals.css
+import "../globals.css";
 
 export function TransactionModal({ open, handleClose, handleSubmit }) {
   const [transactionData, setTransactionData] = useState({payment: "AMEX Card", type: "Personal"});
@@ -75,7 +77,7 @@ export function TransactionModal({ open, handleClose, handleSubmit }) {
             onChange={handleChange}
           />
 
-          <FormControl fullWidth className="mt-2">
+          <FormControl fullWidth className="mt-5">
             <InputLabel id="type-dropdown-label">Type</InputLabel>
             <Select
               value={transactionData.type}

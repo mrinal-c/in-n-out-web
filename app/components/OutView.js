@@ -5,11 +5,11 @@ import {
   Grid,
   Typography,
   Modal,
-  CircularProgress,
   Select,
   FormControl,
   InputLabel,
   MenuItem,
+  CircularProgress,
 } from "@mui/material";
 import { ExpenseTable } from "./ExpenseTable";
 import { TransactionModal } from "./TransactionModal";
@@ -27,18 +27,17 @@ export function OutView({
   const [month, setMonth] = useState(defaultMonth);
   const [year, setYear] = useState(defaultYear);
   const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [tableData, setTableData] = useState({});
   const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
       signIn();
-    }
+    },
   });
 
   const user = session?.user;
-
 
   useEffect(() => {
     reload();
@@ -52,7 +51,11 @@ export function OutView({
     }
     const data = await getTableData(month, user);
     setTableData(data);
-    setLoading(false);
+    //timeout for 5 seconds to test loading UI
+    setTimeout(() => {
+      console.log("done loading");
+      setLoading(false);
+    }, 5000);
   };
 
   const handleMonth = (event) => {
@@ -77,8 +80,8 @@ export function OutView({
   };
 
   const viewTransactions = () => {
-    router.push('/view?month=' + month)
-  }
+    router.push("/view?month=" + month);
+  };
 
   const months = [
     { label: "Jan", value: "Jan", key: "Jan" },
@@ -100,12 +103,12 @@ export function OutView({
     { label: "2024", value: "2024", key: "2024" },
   ];
 
-  return (
+  return loading ? (
+    <div>
+      <CircularProgress size="large" />
+    </div>
+  ) : (
     <Container maxWidth="sm" style={{ marginTop: "50px" }}>
-      {/* <Button onClick={getTableData} variant="contained" color="primary">
-          Reload
-        </Button> */}
-
       <div
         style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
       >
@@ -134,7 +137,9 @@ export function OutView({
 
       {Object.keys(tableData).length > 0 ? (
         <ExpenseTable amounts={tableData} />
-      ) : null}
+      ) : (
+        <CircularProgress size="large" />
+      )}
 
       <div
         style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
@@ -164,14 +169,10 @@ export function OutView({
         handleClose={() => {
           setModalVisible(false);
         }}
-        handleSubmit={(transaction) => {handleSubmitOut(transaction)}}
+        handleSubmit={(transaction) => {
+          handleSubmitOut(transaction);
+        }}
       />
-
-      {loading && (
-        <div>
-          <CircularProgress size="large" />
-        </div>
-      )}
     </Container>
   );
 }
