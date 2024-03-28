@@ -27,10 +27,31 @@ export default function View() {
     let data = await response.json();
     return data;
   };
+
+  const deleteTransaction = async (transaction, month, user) => {
+    "use server";
+    let params = {
+      _id: transaction._id,
+      uid: user?.uid,
+      month: month
+    };
+    let url = addQueryParams(`${process.env.APP_URL}/transaction`, params);
+    let response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        accesstoken: user?.accessToken,
+      },
+    });
+
+    let data = await response.json();
+    return data;
+  
+  }
   return (
     <div>
       <Suspense>
-        <ExpensesView fetchTransactions={fetchTransactions} />
+        <ExpensesView fetchTransactions={fetchTransactions} deleteTransaction={deleteTransaction} />
       </Suspense>
     </div>
   );

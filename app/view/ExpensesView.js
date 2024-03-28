@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useSession, signIn } from "next-auth/react";
 
-export function ExpensesView({ fetchTransactions }) {
+export function ExpensesView({ fetchTransactions, deleteTransaction }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText]  = useState("");
@@ -58,6 +58,7 @@ export function ExpensesView({ fetchTransactions }) {
     });
   };
 
+
   return (
     <Container maxWidth="md" style={{ marginTop: "50px" }}>
       <div className="flex justify-between">
@@ -77,7 +78,7 @@ export function ExpensesView({ fetchTransactions }) {
         <Grid container spacing={2}>
           {filterTransactions(transactions).map((transaction) => (
             <Grid item key={transaction._id} xs={12} sm={6} md={4} lg={3}>
-              <ExpenseCell expense={transaction} />
+              <ExpenseCell expense={transaction} deleteTransaction={() => {deleteTransaction(transaction, searchParams.get("month"), user); getTransactions();}}/>
             </Grid>
           ))}
         </Grid>
