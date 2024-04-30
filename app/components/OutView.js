@@ -2,9 +2,6 @@
 import {
   Button,
   Container,
-  Grid,
-  Typography,
-  Modal,
   Select,
   FormControl,
   InputLabel,
@@ -51,11 +48,7 @@ export function OutView({
     }
     const data = await getTableData(month, user);
     setTableData(data);
-    //timeout for 5 seconds to test loading UI
-    setTimeout(() => {
-      console.log("done loading");
-      setLoading(false);
-    }, 5000);
+    setLoading(false);
   };
 
   const handleMonth = (event) => {
@@ -172,6 +165,7 @@ export function OutView({
         handleSubmit={(transaction) => {
           handleSubmitOut(transaction);
         }}
+        transaction={{payment: 'AMEX Card', type: "", price: 0.00, description: ""}}
       />
     </Container>
   );
