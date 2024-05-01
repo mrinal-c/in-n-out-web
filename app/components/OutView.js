@@ -165,7 +165,6 @@ export function OutView({
         handleSubmit={(transaction) => {
           handleSubmitOut(transaction);
         }}
-        transaction={{payment: 'AMEX Card', type: "", price: 0.00, description: ""}}
       />
     </Container>
   );

@@ -10,11 +10,18 @@ import {
   TextField,
 } from "@mui/material";
 import { useSession, signIn } from "next-auth/react";
+import { TransactionModal } from "../components/TransactionModal";
 
-export function ExpensesView({ fetchTransactions, deleteTransaction }) {
+export function ExpensesView({
+  fetchTransactions,
+  deleteTransaction,
+  editTransaction,
+}) {
   const [transactions, setTransactions] = useState([]);
+  const [transactionToEdit, setTransactionToEdit] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [searchText, setSearchText]  = useState("");
+  const [searchText, setSearchText] = useState("");
   const searchParams = useSearchParams();
   const router = useRouter();
   const { data: session, status } = useSession({
@@ -39,7 +46,7 @@ export function ExpensesView({ fetchTransactions, deleteTransaction }) {
 
   const handleSearch = (event) => {
     setSearchText(event.target.value);
-  }
+  };
 
   const filterTransactions = () => {
     if (searchText == "") {
@@ -58,11 +65,25 @@ export function ExpensesView({ fetchTransactions, deleteTransaction }) {
     });
   };
 
+  const deleteHelper = (transaction) => {
+    deleteTransaction(transaction, searchParams.get("month"), user);
+    getTransactions();
+  };
+
+  const openEditModal = (transaction) => {
+    setTransactionToEdit(transaction);
+    setModalVisible(true);
+  };
+
+  const editHelper = (transaction) => {
+    editTransaction(transaction, searchParams.get("month"), user);
+    getTransactions();
+    setModalVisible(false);
+  };
 
   return (
     <Container maxWidth="md" style={{ marginTop: "50px" }}>
       <div className="flex justify-between">
-      
         <Button
           onClick={() => router.push("/")}
           variant="contained"
@@ -70,7 +91,13 @@ export function ExpensesView({ fetchTransactions, deleteTransaction }) {
         >
           Back
         </Button>
-        <TextField id="outlined-basic" label="Filter" variant="outlined" value={searchText} onChange={handleSearch} />
+        <TextField
+          id="outlined-basic"
+          label="Filter"
+          variant="outlined"
+          value={searchText}
+          onChange={handleSearch}
+        />
       </div>
       <div
         style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
@@ -78,11 +105,23 @@ export function ExpensesView({ fetchTransactions, deleteTransaction }) {
         <Grid container spacing={2}>
           {filterTransactions(transactions).map((transaction) => (
             <Grid item key={transaction._id} xs={12} sm={6} md={4} lg={3}>
-              <ExpenseCell expense={transaction} deleteTransaction={() => {deleteTransaction(transaction, searchParams.get("month"), user); getTransactions();}}/>
+              <ExpenseCell
+                expense={transaction}
+                deleteTransaction={deleteHelper}
+                openEditModal={openEditModal}
+              />
             </Grid>
           ))}
         </Grid>
       </div>
+      <TransactionModal
+        open={modalVisible}
+        handleClose={() => {
+          setModalVisible(false);
+        }}
+        handleSubmit={editHelper}
+        transaction={transactionToEdit}
+      />
 
       {loading && (
         <div>

@@ -28,6 +28,27 @@ export default function View() {
     return data;
   };
 
+  const editTransaction = async (transaction, month, user) => {
+    "use server";
+    let params = {
+      month: month,
+      uid: user?.uid,
+      _id: transaction._id,
+    };
+    let url = addQueryParams(`${process.env.APP_URL}/transaction`, params);
+    let response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        accesstoken: user?.accessToken,
+      },
+      body: JSON.stringify(transaction)
+    });
+
+    let data = await response.json();
+    return data;
+  };
+
   const deleteTransaction = async (transaction, month, user) => {
     "use server";
     let params = {
@@ -51,7 +72,7 @@ export default function View() {
   return (
     <div>
       <Suspense>
-        <ExpensesView fetchTransactions={fetchTransactions} deleteTransaction={deleteTransaction} />
+        <ExpensesView fetchTransactions={fetchTransactions} deleteTransaction={deleteTransaction} editTransaction={editTransaction}/>
       </Suspense>
     </div>
   );

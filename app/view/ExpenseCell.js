@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, Typography, Button } from '@mui/material';
 import Image from 'next/image'
 
-export function ExpenseCell ({ expense, deleteTransaction })  {
+export function ExpenseCell ({ expense, deleteTransaction, openEditModal })  {
   const { date, description, type, price, payment, _id } = expense;
 
   const filename = (paymentName) => {
@@ -14,7 +14,7 @@ export function ExpenseCell ({ expense, deleteTransaction })  {
         return 'amex.png';
       case 'Citi Card':
         return 'citi.png';
-      case 'Debit Card':
+      case 'Ally Card':
         return 'ally.png';
       case 'Cash':
         return 'cash.png';
@@ -24,6 +24,7 @@ export function ExpenseCell ({ expense, deleteTransaction })  {
   const handleDelete = () => {
     deleteTransaction(expense);
   }
+
 
   return (
     <Card variant="outlined" style={{ marginBottom: '16px' }}>
@@ -48,6 +49,9 @@ export function ExpenseCell ({ expense, deleteTransaction })  {
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+        <Button variant="outlined" color="secondary" onClick={() => {openEditModal(expense)}}>
+            Edit
+          </Button>
           <Button variant="outlined" color="secondary" onClick={handleDelete}>
             Delete
           </Button>

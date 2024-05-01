@@ -20,15 +20,34 @@ import { Close } from "@mui/icons-material";
 //import globals.css
 import "../globals.css";
 
-export function TransactionModal({ open, handleClose, handleSubmit }) {
-  const [transactionData, setTransactionData] = useState({payment: "AMEX Card", type: "Personal"});
+export function TransactionModal({
+  open,
+  handleClose,
+  handleSubmit,
+  transaction,
+}) {
+  const [transactionData, setTransactionData] = useState({
+    payment: "",
+    type: "",
+    price: 0.0,
+    description: "",
+  });
   const [date, setDate] = useState(dayjs());
+
+  useEffect(() => {
+    if (transaction && Object.keys(transaction).length !== 0) {
+      setTransactionData(transaction);
+    }
+    if (transaction && transaction.date) {
+      setDate(dayjs(transaction.date));
+    }
+  }, [transaction]);
 
   const payments = [
     { label: "Cash", value: "Cash", key: "Cash" },
     { label: "AMEX Card", value: "AMEX Card", key: "AMEX Card" },
     { label: "Citi Card", value: "Citi Card", key: "Citi Card" },
-    { label: "Debit Card", value: "Debit Card", key: "Debit Card" },
+    { label: "Ally Card", value: "Ally Card", key: "Ally Card" },
     { label: "Venmo", value: "Venmo", key: "Venmo" },
   ];
   const types = [
@@ -50,6 +69,16 @@ export function TransactionModal({ open, handleClose, handleSubmit }) {
     setTransactionData({ ...transactionData, [name]: value });
   };
 
+  const invalidTransaction = () => {
+    return (
+      transactionData.payment === "" ||
+      transactionData.type === "" ||
+      transactionData.description === "" ||
+      transactionData.price === NaN ||
+      transactionData.price < 0
+    );
+  };
+
   return (
     <Modal
       open={open}
@@ -69,13 +98,16 @@ export function TransactionModal({ open, handleClose, handleSubmit }) {
             <DatePicker label="Date" value={date} onChange={handleDateChange} />
           </LocalizationProvider>
 
-          <TextField
-            label="Description"
-            name="description"
-            fullWidth
-            margin="normal"
-            onChange={handleChange}
-          />
+          <FormControl fullWidth className="mt-5">
+            <TextField
+              label="Description"
+              name="description"
+              fullWidth
+              margin="normal"
+              value={transactionData.description}
+              onChange={handleChange}
+            />
+          </FormControl>
 
           <FormControl fullWidth className="mt-5">
             <InputLabel id="type-dropdown-label">Type</InputLabel>
@@ -109,12 +141,13 @@ export function TransactionModal({ open, handleClose, handleSubmit }) {
             </Select>
           </FormControl>
 
-          <FormControl fullWidth margin="normal">
+          <FormControl fullWidth className="mt-5">
             <TextField
               id="price"
               name="price"
               type="number"
               label="$$$"
+              value={transactionData.price}
               onChange={handleChange}
             />
           </FormControl>
@@ -123,20 +156,13 @@ export function TransactionModal({ open, handleClose, handleSubmit }) {
             <Button
               variant="contained"
               color="primary"
+              disabled={invalidTransaction()}
               onClick={() => {
                 transactionData.date = date.format("YYYY-MM-DD");
                 handleSubmit(transactionData);
               }}
             >
               Submit
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleClose}
-              className="ml-2"
-            >
-              Close
             </Button>
           </div>
         </div>
