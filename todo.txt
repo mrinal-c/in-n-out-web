@@ -1,0 +1,6 @@
+- edit functionalitys
+handle errors gracefully
+add loading bars
+- grey out submit button till fields are validated
+spacing in transaction modal
+fix display of expense cells in computer
