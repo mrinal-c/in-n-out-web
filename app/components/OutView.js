@@ -24,9 +24,6 @@ export function OutView() {
   const year = useAppSelector((state) => state.date.year);
   const [modalVisible, setModalVisible] = useState(false);
   const error = useAppSelector((state) => state.expense.error);
-  if (error) {
-    console.log("Error:", error);
-  }
   const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
@@ -148,9 +145,7 @@ export function OutView() {
         handleClose={() => {
           setModalVisible(false);
         }}
-        handleSubmit={(transaction) => {
-          handleSubmitOut(transaction);
-        }}
+        handleSubmit={handleSubmitOut}
       />
     </Container>
   );

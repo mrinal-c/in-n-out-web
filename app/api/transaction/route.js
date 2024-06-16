@@ -35,8 +35,7 @@ export async function DELETE(request) {
       accesstoken: searchParams.get("accessToken"),
     },
   });
-  let data = await response.json();
-  return NextResponse.json(data);
+  return NextResponse.json({ success: response.status == 200 });
 }
 
 export async function GET(request) {
@@ -60,6 +59,7 @@ export async function GET(request) {
 
 export async function PUT(request) {
   const searchParams = request.nextUrl.searchParams;
+  const transaction = await request.json();
   let query = {
     month: searchParams.get("month"),
     uid: searchParams.get("uid"),

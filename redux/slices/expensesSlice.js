@@ -44,6 +44,7 @@ export const addOut = createAsyncThunk(
       accessToken: user.accessToken,
       month: month,
     };
+    const transaction = data.transaction;
     const url = addQueryParams("/api/transaction", params);
     try {
       const response = await fetch(url, {
@@ -51,44 +52,12 @@ export const addOut = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data.transaction),
+        body: JSON.stringify(transaction),
       });
       const data = await response.json();
       let success = data.success;
       if (success) {
-        thunkAPI.dispatch(getTableData());
-      } else {
-        return thunkAPI.rejectWithValue({ error: "Failed to add expense" });
-      }
-    } catch (error) {
-      return thunkAPI.rejectWithValue({ error: error.message });
-    }
-  }
-);
-
-export const deleteTransaction = createAsyncThunk(
-  "expense/deleteTransaction",
-  async (data, thunkAPI) => {
-    const user = data.user;
-    const month = thunkAPI.getState().date.month;
-    const params = {
-      uid: user.uid,
-      accessToken: user.accessToken,
-      month: month,
-      _id: data.transaction._id,
-    };
-    const url = addQueryParams("/api/transaction", params);
-    try {
-      const response = await fetch(url, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      let success = data.success;
-      if (success) {
-        thunkAPI.dispatch(getTableData());
+        thunkAPI.dispatch(getTableData({ user: user}));
       } else {
         return thunkAPI.rejectWithValue({ error: "Failed to add expense" });
       }
@@ -124,16 +93,51 @@ export const fetchTransactions = createAsyncThunk(
   }
 );
 
+export const deleteTransaction = createAsyncThunk(
+  "expense/deleteTransaction",
+  async (data, thunkAPI) => {
+    const user = data.user;
+    const month = thunkAPI.getState().date.month;
+    const transaction = data.transaction;
+    const params = {
+      uid: user.uid,
+      accessToken: user.accessToken,
+      month: month,
+      _id: transaction._id,
+    };
+    const url = addQueryParams("/api/transaction", params);
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      let success = data.success;
+      if (success) {
+        console.log("deleted, now refreshing transactions")
+        thunkAPI.dispatch(fetchTransactions({ user: user}));
+      } else {
+        return thunkAPI.rejectWithValue({ error: "Failed to add expense" });
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
 export const editTransaction = createAsyncThunk(
   "expense/editTransaction",
   async (data, thunkAPI) => {
     const user = data.user;
     const month = thunkAPI.getState().date.month;
+    const transaction = data.transaction;
     const params = {
       uid: user.uid,
       accessToken: user.accessToken,
       month: month,
-      _id: data.transaction._id,
+      _id: transaction._id,
     };
     const url = addQueryParams("/api/transaction", params);
     try {
@@ -142,12 +146,12 @@ export const editTransaction = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data.transaction),
+        body: JSON.stringify(transaction),
       });
       const data = await response.json();
       let success = data.success;
       if (success) {
-        thunkAPI.dispatch(getTableData());
+        thunkAPI.dispatch(fetchTransactions({ user: user}));
       } else {
         return thunkAPI.rejectWithValue({ error: "Failed to add expense" });
       }

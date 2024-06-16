@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ExpenseCell } from "./ExpenseCell";
-import { useSearchParams, useRouter } from "next/navigation";
 import {
   Button,
   Container,
@@ -9,20 +8,18 @@ import {
   CircularProgress,
   TextField,
 } from "@mui/material";
-import { useSession, signIn } from "next-auth/react";
 import { TransactionModal } from "../components/TransactionModal";
+import { useRouter } from "next/navigation";
+import { useSession, signIn } from "next-auth/react";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
+import { fetchTransactions, editTransaction, deleteTransaction } from "@/redux/slices/expensesSlice";
 
-export function ExpensesView({
-  fetchTransactions,
-  deleteTransaction,
-  editTransaction,
-}) {
-  const [transactions, setTransactions] = useState([]);
+export function ExpensesView() {
+  const dispatch = useAppDispatch();
+  const transactions = useAppSelector((state) => state.expense.expenses);
   const [transactionToEdit, setTransactionToEdit] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const searchParams = useSearchParams();
   const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
@@ -34,15 +31,10 @@ export function ExpensesView({
   const user = session?.user;
 
   useEffect(() => {
-    getTransactions();
-  }, []);
-
-  const getTransactions = async () => {
-    const data = await fetchTransactions(searchParams.get("month"), user);
-    //sort transactions by transactions.date
-    data.sort((a, b) => new Date(b.date) - new Date(a.date));
-    setTransactions(data);
-  };
+    if (status === "authenticated") {
+      dispatch(fetchTransactions({ user: user }));
+    }
+  }, [status]);
 
   const handleSearch = (event) => {
     setSearchText(event.target.value);
@@ -66,8 +58,7 @@ export function ExpensesView({
   };
 
   const deleteHelper = (transaction) => {
-    deleteTransaction(transaction, searchParams.get("month"), user);
-    getTransactions();
+    dispatch(deleteTransaction({ transaction: transaction, user: user }));
   };
 
   const openEditModal = (transaction) => {
@@ -76,8 +67,7 @@ export function ExpensesView({
   };
 
   const editHelper = (transaction) => {
-    editTransaction(transaction, searchParams.get("month"), user);
-    getTransactions();
+    dispatch(editTransaction({ transaction: transaction, user: user }));
     setModalVisible(false);
   };
 
@@ -122,12 +112,6 @@ export function ExpensesView({
         handleSubmit={editHelper}
         transaction={transactionToEdit}
       />
-
-      {loading && (
-        <div>
-          <CircularProgress size="large" />
-        </div>
-      )}
     </Container>
   );
 }
