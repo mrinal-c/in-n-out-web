@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import StoreProvider from "@/redux/StoreProvider";
 import { NextAuthProvider } from "./NextAuthProvider";
 import "./globals.css";
 
@@ -11,10 +12,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <NextAuthProvider>
-      <html lang="en">
-        <body className={inter.className}>{children}</body>
-      </html>
-    </NextAuthProvider>
+    <StoreProvider>
+      <NextAuthProvider>
+        <html lang="en">
+          <body className={inter.className}>{children}</body>
+        </html>
+      </NextAuthProvider>
+    </StoreProvider>
   );
 }

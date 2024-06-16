@@ -13,19 +13,17 @@ import { TransactionModal } from "./TransactionModal";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
+import { getTableData, addOut } from "@/redux/slices/expensesSlice";
+import { setMonth, changeYear } from "@/redux/slices/dateSlice";
 
-export function OutView({
-  defaultMonth,
-  defaultYear,
-  getTableData,
-  changeYear,
-  addOut,
-}) {
-  const [month, setMonth] = useState(defaultMonth);
-  const [year, setYear] = useState(defaultYear);
+export function OutView() {
+  const tableData = useAppSelector((state) => state.expense.tableData);
+  const dispatch = useAppDispatch();
+  const month = useAppSelector((state) => state.date.month);
+  const year = useAppSelector((state) => state.date.year);
   const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [tableData, setTableData] = useState({});
+  const error = useAppSelector((state) => state.expense.error);
   const router = useRouter();
   const { data: session, status } = useSession({
     required: true,
@@ -37,39 +35,24 @@ export function OutView({
   const user = session?.user;
 
   useEffect(() => {
-    reload();
-  }, [month, year, status]);
-
-  const reload = async () => {
-    setLoading(true);
-    //wait for user to be defined
-    if (!user) {
-      return;
+    if (status === "authenticated") {
+      dispatch(changeYear({ year: year, user: user }));
+      dispatch(getTableData({ user: user }));
     }
-    const data = await getTableData(month, user);
-    setTableData(data);
-    setLoading(false);
-  };
+  }, [status, month, year]);
+
 
   const handleMonth = (event) => {
-    setMonth(event.target.value);
+    dispatch(setMonth(event.target.value));
   };
 
-  const handleYear = async (event) => {
-    setLoading(true);
-    setYear(event.target.value);
-    await changeYear(event.target.value, user);
-    setLoading(false);
+  const handleYear = (event) => {
+    dispatch(changeYear({year: event.target.value, user: user}));
   };
 
-  const handleSubmitOut = async (transaction) => {
+  const handleSubmitOut = (transaction) => {
     setModalVisible(false);
-    let success = await addOut(transaction, user, month);
-    if (success) {
-      reload();
-    } else {
-      alert("Failed to add transaction");
-    }
+    dispatch(addOut({ transaction: transaction, user: user }));
   };
 
   const viewTransactions = () => {
@@ -96,7 +79,7 @@ export function OutView({
     { label: "2024", value: "2024", key: "2024" },
   ];
 
-  return loading ? (
+  return false ? (
     <div>
       <CircularProgress size="large" />
     </div>
@@ -128,7 +111,7 @@ export function OutView({
         </FormControl>
       </div>
 
-      {Object.keys(tableData).length > 0 ? (
+      {tableData != undefined && Object.keys(tableData).length > 0 ? (
         <ExpenseTable amounts={tableData} />
       ) : (
         <CircularProgress size="large" />
@@ -162,9 +145,7 @@ export function OutView({
         handleClose={() => {
           setModalVisible(false);
         }}
-        handleSubmit={(transaction) => {
-          handleSubmitOut(transaction);
-        }}
+        handleSubmit={handleSubmitOut}
       />
     </Container>
   );
