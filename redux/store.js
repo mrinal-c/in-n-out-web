@@ -8,6 +8,7 @@ export const makeStore = () => {
     reducer: {
         expense: expenseReducer,
         date: dateReducer,
+        user: userReducer
     }
   })
 }

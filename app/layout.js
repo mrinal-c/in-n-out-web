@@ -1,7 +1,15 @@
 import { Inter } from "next/font/google";
 import StoreProvider from "@/redux/StoreProvider";
 import { NextAuthProvider } from "./NextAuthProvider";
-import "./globals.css";
+import { ChakraProvider } from "@chakra-ui/react";
+import {
+  ThemeProvider as MuiThemeProvider,
+  createTheme as createMuiTheme,
+} from "@mui/material/styles";
+import theme from "./theme";
+import React from "react";
+
+// import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,12 +20,18 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <StoreProvider>
-      <NextAuthProvider>
-        <html lang="en">
-          <body className={inter.className}>{children}</body>
-        </html>
-      </NextAuthProvider>
-    </StoreProvider>
+    <React.StrictMode>
+      <StoreProvider>
+        <NextAuthProvider>
+          <html>
+            <body className={inter.className}>
+              <ChakraProvider theme={theme}>
+                {children}
+              </ChakraProvider>
+            </body>
+          </html>
+        </NextAuthProvider>
+      </StoreProvider>
+    </React.StrictMode>
   );
 }

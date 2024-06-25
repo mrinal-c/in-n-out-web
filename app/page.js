@@ -1,9 +1,5 @@
-import { OutView } from "./components/OutView";
+import { Start } from "./components/Start";
 
-export default function Home() {
-  return (
-    <div>
-        <OutView />
-    </div>
-  );
+export default function StartPage() {
+  return <Start />;
 }

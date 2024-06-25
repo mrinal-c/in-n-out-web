@@ -2,17 +2,24 @@
 import { useState, useEffect } from "react";
 import { ExpenseCell } from "./ExpenseCell";
 import {
+  Box,
   Button,
-  Container,
+  Input,
   Grid,
-  CircularProgress,
-  TextField,
-} from "@mui/material";
+  GridItem,
+  Container,
+  Flex,
+  SimpleGrid,
+} from "@chakra-ui/react";
 import { TransactionModal } from "../components/TransactionModal";
 import { useRouter } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
-import { fetchTransactions, editTransaction, deleteTransaction } from "@/redux/slices/expensesSlice";
+import {
+  fetchTransactions,
+  editTransaction,
+  deleteTransaction,
+} from "@/redux/slices/expensesSlice";
 
 export function ExpensesView() {
   const dispatch = useAppDispatch();
@@ -21,20 +28,14 @@ export function ExpensesView() {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      signIn();
-    },
-  });
-
-  const user = session?.user;
+  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
+  const user = useAppSelector((state) => state.user.user);
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (isLoggedIn) {
       dispatch(fetchTransactions({ user: user }));
     }
-  }, [status]);
+  }, [isLoggedIn]);
 
   const handleSearch = (event) => {
     setSearchText(event.target.value);
@@ -72,43 +73,35 @@ export function ExpensesView() {
   };
 
   return (
-    <Container maxWidth="md" style={{ marginTop: "50px" }}>
-      <div className="flex justify-between">
-        <Button
-          onClick={() => router.push("/")}
-          variant="contained"
-          color="error"
-        >
+    <Container mt="50px" pl="50px" pr="50px" maxW="full">
+      <Flex justifyContent="space-between" mb={4}>
+        <Button colorScheme="red" onClick={() => router.push("/home")} mr="1rem">
           Back
         </Button>
-        <TextField
+        <Input
           id="outlined-basic"
-          label="Filter"
-          variant="outlined"
+          placeholder="Filter"
           value={searchText}
           onChange={handleSearch}
+          variant="outline"
         />
-      </div>
-      <div
-        style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
-      >
-        <Grid container spacing={2}>
-          {filterTransactions(transactions).map((transaction) => (
-            <Grid item key={transaction._id} xs={12} sm={6} md={4} lg={3}>
-              <ExpenseCell
-                expense={transaction}
-                deleteTransaction={deleteHelper}
-                openEditModal={openEditModal}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </div>
+      </Flex>
+      {/* <Box mt="20px" display="flex" justifyContent="center"> */}
+      <SimpleGrid minChildWidth="200px" spacing={4}>
+        {filterTransactions(transactions).map((transaction) => (
+          <Box key={transaction._id} maxW="500px">
+            <ExpenseCell
+              expense={transaction}
+              deleteTransaction={deleteHelper}
+              openEditModal={openEditModal}
+            />
+          </Box>
+        ))}
+      </SimpleGrid>
+      {/* </Box> */}
       <TransactionModal
         open={modalVisible}
-        handleClose={() => {
-          setModalVisible(false);
-        }}
+        handleClose={() => setModalVisible(false)}
         handleSubmit={editHelper}
         transaction={transactionToEdit}
       />

@@ -3,22 +3,23 @@
 import React, { useEffect, useState } from "react";
 import {
   Modal,
-  MenuItem,
-  Fade,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
   Button,
-  TextField,
   FormControl,
-  InputLabel,
+  FormLabel,
+  Input,
   Select,
-  IconButton,
-} from "@mui/material";
+  Box,
+  IconButton
+} from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
+import { SingleDatepicker } from "chakra-dayzed-datepicker";
 
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
-import { Close } from "@mui/icons-material";
-//import globals.css
-import "../globals.css";
 
 export function TransactionModal({
   open,
@@ -32,14 +33,14 @@ export function TransactionModal({
     price: 0.0,
     description: "",
   });
-  const [date, setDate] = useState(dayjs());
+  const [date, setDate] = useState(new Date());
 
   useEffect(() => {
     if (transaction && Object.keys(transaction).length !== 0) {
       setTransactionData(transaction);
     }
     if (transaction && transaction.date) {
-      setDate(dayjs(transaction.date));
+      setDate(new Date(transaction.date + "T04:00:00"));
     }
   }, [transaction]);
 
@@ -60,10 +61,6 @@ export function TransactionModal({
     { label: "Travel", value: "Travel", key: "Travel" },
   ];
 
-  const handleDateChange = (newDate) => {
-    setDate(newDate);
-  };
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     setTransactionData({ ...transactionData, [name]: value });
@@ -80,93 +77,87 @@ export function TransactionModal({
   };
 
   return (
-    <Modal
-      open={open}
-      closeAfterTransition
-      className="flex items-center justify-center h-screen"
-    >
-      <Fade in={open}>
-        <div className="bg-white p-8 w-96">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Add Transaction</h2>
-            <IconButton color="inherit" onClick={handleClose}>
-              <Close />
-            </IconButton>
-          </div>
+    <Modal isOpen={open} onClose={handleClose} isCentered>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader display="flex" justifyContent="space-between" alignItems="center">
+          Add Transaction
+          <IconButton aria-label="Close modal" icon={<CloseIcon />} onClick={handleClose} />
+        </ModalHeader>
+        <ModalBody>
+          <Box mb={4}>
+            <FormControl>
+              <FormLabel>Date</FormLabel>
+              <SingleDatepicker date={date} onDateChange={setDate} />
+            </FormControl>
+          </Box>
 
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker label="Date" value={date} onChange={handleDateChange} />
-          </LocalizationProvider>
-
-          <FormControl fullWidth className="mt-5">
-            <TextField
-              label="Description"
+          <FormControl mb={4}>
+            <FormLabel>Description</FormLabel>
+            <Input
+              placeholder="Description"
               name="description"
-              fullWidth
-              margin="normal"
               value={transactionData.description}
               onChange={handleChange}
             />
           </FormControl>
 
-          <FormControl fullWidth className="mt-5">
-            <InputLabel id="type-dropdown-label">Type</InputLabel>
+          <FormControl mb={4}>
+            <FormLabel>Type</FormLabel>
             <Select
-              value={transactionData.type}
-              label="Type"
+              placeholder="Select type"
               name="type"
+              value={transactionData.type}
               onChange={handleChange}
             >
               {types.map((type) => (
-                <MenuItem key={type.key} value={type.value}>
+                <option key={type.key} value={type.value}>
                   {type.label}
-                </MenuItem>
+                </option>
               ))}
             </Select>
           </FormControl>
 
-          <FormControl fullWidth className="mt-5">
-            <InputLabel id="payment-dropdown-label">Payment</InputLabel>
+          <FormControl mb={4}>
+            <FormLabel>Payment</FormLabel>
             <Select
-              value={transactionData.payment}
-              label="Payment"
+              placeholder="Select payment method"
               name="payment"
+              value={transactionData.payment}
               onChange={handleChange}
             >
               {payments.map((payment) => (
-                <MenuItem key={payment.key} value={payment.value}>
+                <option key={payment.key} value={payment.value}>
                   {payment.label}
-                </MenuItem>
+                </option>
               ))}
             </Select>
           </FormControl>
 
-          <FormControl fullWidth className="mt-5">
-            <TextField
-              id="price"
-              name="price"
+          <FormControl mb={4}>
+            <FormLabel>Price</FormLabel>
+            <Input
               type="number"
-              label="$$$"
+              placeholder="$$$"
+              name="price"
               value={transactionData.price}
               onChange={handleChange}
             />
           </FormControl>
+        </ModalBody>
 
-          <div className="mt-4 flex justify-end">
-            <Button
-              variant="contained"
-              color="primary"
-              disabled={invalidTransaction()}
-              onClick={() => {
-                transactionData.date = date.format("YYYY-MM-DD");
-                handleSubmit(transactionData);
-              }}
-            >
-              Submit
-            </Button>
-          </div>
-        </div>
-      </Fade>
+        <ModalFooter>
+          <Button
+            colorScheme="blue"
+            isDisabled={invalidTransaction()}
+            onClick={() => {
+              handleSubmit({...transactionData, date: date.toISOString().split('T')[0]});
+            }}
+          >
+            Submit
+          </Button>
+        </ModalFooter>
+      </ModalContent>
     </Modal>
   );
 }
