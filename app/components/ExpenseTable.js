@@ -1,23 +1,32 @@
 // components/ExpenseTable.js
 'use client';
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {
+  Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+} from '@chakra-ui/react';
 
 export function ExpenseTable({ amounts }) {
-  const categories = ["Food", "Groceries", "Travel", "Big Ticket", "Personal", "TotalNoBT"]
+  const categories = ["Food", "Groceries", "Travel", "Big Ticket", "Personal", "TotalNoBT"];
 
   return (
-    <TableContainer component={Paper} className='mt-10'>
-      <Table>
-        <TableBody>
+    <TableContainer as={Box} mt="10">
+      <Table variant="striped" colorScheme="gray">
+        <Tbody>
           {categories.map((category, index) => (
-            <TableRow key={index}>
-              <TableCell>{category}</TableCell>
-              <TableCell align="right">{amounts[category]}</TableCell>
-            </TableRow>
+            <Tr key={index}>
+              <Td>{category}</Td>
+              <Td isNumeric>{amounts[category]}</Td>
+            </Tr>
           ))}
-        </TableBody>
+        </Tbody>
       </Table>
     </TableContainer>
   );
-};
+}

@@ -1,18 +1,23 @@
 "use client";
 import {
-  Button,
   Container,
   Select,
   FormControl,
-  InputLabel,
-  MenuItem,
+  FormLabel,
+  Button,
   CircularProgress,
-} from "@mui/material";
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react";
 import { ExpenseTable } from "./ExpenseTable";
 import { TransactionModal } from "./TransactionModal";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession, signIn } from "next-auth/react";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 import { getTableData, addOut } from "@/redux/slices/expensesSlice";
 import { setMonth, changeYear } from "@/redux/slices/dateSlice";
@@ -25,21 +30,18 @@ export function OutView() {
   const [modalVisible, setModalVisible] = useState(false);
   const error = useAppSelector((state) => state.expense.error);
   const router = useRouter();
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      signIn();
-    },
-  });
-
-  const user = session?.user;
+  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
+  const user = useAppSelector((state) => state.user.user);
+  
 
   useEffect(() => {
-    if (status === "authenticated") {
-      dispatch(changeYear({ year: year, user: user }));
-      dispatch(getTableData({ user: user }));
+    if (!isLoggedIn) {
+      router.push("/");
+    } else {
+      dispatch(changeYear({year: year, user: user}));
+      dispatch(getTableData({ month: month, year: year, user: user }));
     }
-  }, [status, month, year]);
+  }, [isLoggedIn, month, year]);
 
 
   const handleMonth = (event) => {
@@ -53,6 +55,7 @@ export function OutView() {
   const handleSubmitOut = (transaction) => {
     setModalVisible(false);
     dispatch(addOut({ transaction: transaction, user: user }));
+    // console.log(transaction);
   };
 
   const viewTransactions = () => {
@@ -79,42 +82,38 @@ export function OutView() {
     { label: "2024", value: "2024", key: "2024" },
   ];
 
-  return false ? (
-    <div>
-      <CircularProgress size="large" />
-    </div>
-  ) : (
-    <Container maxWidth="sm" style={{ marginTop: "50px" }}>
+  return (
+    <Container maxW="sm" mt="50px">
       <div
         style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
       >
-        <FormControl fullWidth>
-          <InputLabel id="month-dropdown-label">Month</InputLabel>
-          <Select value={month} label="Month" onChange={handleMonth}>
+        <FormControl>
+          <FormLabel id="month-dropdown-label">Month</FormLabel>
+          <Select value={month} onChange={handleMonth} placeholder="Select month">
             {months.map((month) => (
-              <MenuItem key={month.key} value={month.value}>
+              <option key={month.key} value={month.value}>
                 {month.label}
-              </MenuItem>
+              </option>
             ))}
           </Select>
         </FormControl>
 
-        <FormControl fullWidth>
-          <InputLabel id="year-dropdown-label">Year</InputLabel>
-          <Select value={year} label="Year" onChange={handleYear}>
+        <FormControl>
+          <FormLabel id="year-dropdown-label">Year</FormLabel>
+          <Select value={year} onChange={handleYear} placeholder="Select year">
             {years.map((year) => (
-              <MenuItem key={year.key} value={year.value}>
+              <option key={year.key} value={year.value}>
                 {year.label}
-              </MenuItem>
+              </option>
             ))}
           </Select>
         </FormControl>
       </div>
 
-      {tableData != undefined && Object.keys(tableData).length > 0 ? (
+      {tableData && Object.keys(tableData).length > 0 ? (
         <ExpenseTable amounts={tableData} />
       ) : (
-        <CircularProgress size="large" />
+        <CircularProgress isIndeterminate size="small" />
       )}
 
       <div
@@ -122,19 +121,17 @@ export function OutView() {
       >
         <Button
           onClick={() => setModalVisible(true)}
-          variant="contained"
-          color="success"
-          className="mr-5"
-          disabled={month === ""}
+          colorScheme="green"
+          mr={5}
+          isDisabled={!month}
         >
           Add
         </Button>
 
         <Button
           onClick={viewTransactions}
-          variant="contained"
-          color="error"
-          disabled={month === ""}
+          colorScheme="red"
+          isDisabled={!month}
         >
           View
         </Button>
@@ -142,9 +139,7 @@ export function OutView() {
 
       <TransactionModal
         open={modalVisible}
-        handleClose={() => {
-          setModalVisible(false);
-        }}
+        handleClose={() => setModalVisible(false)}
         handleSubmit={handleSubmitOut}
       />
     </Container>

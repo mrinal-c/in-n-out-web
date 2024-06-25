@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
@@ -19,8 +20,10 @@
     "@mui/material": "^5.15.7",
     "@mui/x-date-pickers": "^6.19.3",
     "@reduxjs/toolkit": "^2.2.5",
-    "date-fns": "^3.3.1",
+    "chakra-dayzed-datepicker": "^0.3.0",
+    "date-fns": "^3.6.0",
     "dayjs": "^1.11.10",
+    "dayzed": "^3.2.3",
     "formik": "^2.4.6",
     "formik-chakra-ui": "^1.6.1",
     "framer-motion": "^11.2.11",

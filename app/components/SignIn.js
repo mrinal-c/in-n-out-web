@@ -5,6 +5,8 @@ import { InputControl, SubmitButton } from "formik-chakra-ui";
 import React from "react";
 import * as Yup from "yup";
 import { ModalForm } from "./ModalForm";
+import { login } from "@/redux/slices/userSlice";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 
 const initialValues = {
   email: "",
@@ -13,14 +15,16 @@ const initialValues = {
 
 const validationSchema = Yup.object({
   email: Yup.string().required().email(),
-  password: Yup.string().required().min(8),
+  password: Yup.string().required().min(2),
 });
 
 export function SignIn({ isOpen, onClose }) {
   const initialRef = React.useRef(null);
+  const dispatch = useAppDispatch();
+
 
   const onLogIn = async (values) => {
-    console.log(values);
+    dispatch(login(values));
   };
 
   return (
@@ -28,7 +32,7 @@ export function SignIn({ isOpen, onClose }) {
       initialRef={initialRef}
       isOpen={isOpen}
       onClose={onClose}
-      modalHeader="Log Into EcoTransit"
+      modalHeader="Log Into in-n-out"
     >
       <Formik
         initialValues={initialValues}

@@ -187,7 +187,9 @@ export const expenseSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchTransactions.fulfilled, (state, action) => {
-        state.expenses = action.payload;
+        state.expenses = action.payload.sort((a, b) => {
+          return new Date(b.date) - new Date(a.date);
+        });
         state.error = null;
       })
       .addCase(fetchTransactions.rejected, (state, action) => {

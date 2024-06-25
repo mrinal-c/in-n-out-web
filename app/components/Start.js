@@ -9,6 +9,9 @@ import {
   Highlight,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function Start() {
   const {
@@ -21,6 +24,14 @@ export function Start() {
     onOpen: onOpenLogIn,
     onClose: onCloseLogIn,
   } = useDisclosure();
+  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push("/home");
+    }
+  }, [isLoggedIn]);
 
   return (
     <Box
@@ -43,7 +54,7 @@ export function Start() {
         <Button onClick={onOpenSignUp}>Sign Up</Button>
         <Button onClick={onOpenLogIn}>Sign In</Button>
       </ButtonGroup>
-      {/* <SignUp isOpen={isOpenSignUp} onClose={onCloseSignUp} /> */}
+      <SignUp isOpen={isOpenSignUp} onClose={onCloseSignUp} />
       <SignIn isOpen={isOpenLogIn} onClose={onCloseLogIn} />
     </Box>
   );

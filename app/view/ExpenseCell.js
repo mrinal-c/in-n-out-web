@@ -1,10 +1,9 @@
-'use client'
+'use client';
 import React from 'react';
-import { Card, CardContent, Typography, Button } from '@mui/material';
-import Image from 'next/image'
+import { Box, Text, Button, Image, Flex } from '@chakra-ui/react';
 
-export function ExpenseCell ({ expense, deleteTransaction, openEditModal })  {
-  const { date, description, type, price, payment, _id } = expense;
+export function ExpenseCell({ expense, deleteTransaction, openEditModal }) {
+  const { date, description, type, price, payment } = expense;
 
   const filename = (paymentName) => {
     switch (paymentName) {
@@ -18,45 +17,51 @@ export function ExpenseCell ({ expense, deleteTransaction, openEditModal })  {
         return 'ally.png';
       case 'Cash':
         return 'cash.png';
+      default:
+        return 'default.png';
     }
-  }
+  };
 
   const handleDelete = () => {
     deleteTransaction(expense);
-  }
-
+  };
 
   return (
-    <Card variant="outlined" style={{ marginBottom: '16px' }}>
-      <CardContent>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <Typography variant="h6" gutterBottom>
+    <Box borderWidth="1px" borderRadius="md" overflow="hidden" mb={4}>
+      <Box p={4}>
+        <Flex alignItems="center" justifyContent="space-between">
+          <Box>
+            <Text fontSize="xl" fontWeight="semibold" mb={2}>
               {description}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" gutterBottom>
+            </Text>
+            <Text fontSize="sm" color="gray.500" mb={2}>
               Date: {date}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" gutterBottom>
+            </Text>
+            <Text fontSize="sm" color="gray.500" mb={2}>
               Category: {type}
-            </Typography>
-            <Typography variant="body1" color="textPrimary">
+            </Text>
+            <Text fontSize="md" color="gray.700">
               Amount: ${price}
-            </Typography>
-          </div>
-          <div>
-            <Image src={`/${filename(payment)}`} alt={payment} width={50} height={50} />
-          </div>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
-        <Button variant="outlined" color="secondary" onClick={() => {openEditModal(expense)}}>
+            </Text>
+          </Box>
+          <Box>
+            <Image src={`/${filename(payment)}`} alt={payment} boxSize="50px" />
+          </Box>
+        </Flex>
+        <Flex justifyContent="flex-end" mt={4}>
+          <Button
+            variant="outline"
+            colorScheme="blue"
+            onClick={() => openEditModal(expense)}
+            mr={2}
+          >
             Edit
           </Button>
-          <Button variant="outlined" color="secondary" onClick={handleDelete}>
+          <Button variant="outline" colorScheme="red" onClick={handleDelete}>
             Delete
           </Button>
-        </div>
-      </CardContent>
-    </Card>
+        </Flex>
+      </Box>
+    </Box>
   );
-};
+}

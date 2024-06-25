@@ -2,6 +2,10 @@ import { Inter } from "next/font/google";
 import StoreProvider from "@/redux/StoreProvider";
 import { NextAuthProvider } from "./NextAuthProvider";
 import { ChakraProvider } from "@chakra-ui/react";
+import {
+  ThemeProvider as MuiThemeProvider,
+  createTheme as createMuiTheme,
+} from "@mui/material/styles";
 import theme from "./theme";
 import React from "react";
 
@@ -20,8 +24,10 @@ export default function RootLayout({ children }) {
       <StoreProvider>
         <NextAuthProvider>
           <html>
-            <body>
-              <ChakraProvider theme={theme}>{children}</ChakraProvider>
+            <body className={inter.className}>
+              <ChakraProvider theme={theme}>
+                {children}
+              </ChakraProvider>
             </body>
           </html>
         </NextAuthProvider>
