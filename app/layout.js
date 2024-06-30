@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
 import StoreProvider from "@/redux/StoreProvider";
-import { NextAuthProvider } from "./NextAuthProvider";
 import { ChakraProvider } from "@chakra-ui/react";
 import {
   ThemeProvider as MuiThemeProvider,
@@ -22,7 +21,6 @@ export default function RootLayout({ children }) {
   return (
     <React.StrictMode>
       <StoreProvider>
-        <NextAuthProvider>
           <html>
             <body className={inter.className}>
               <ChakraProvider theme={theme}>
@@ -30,7 +28,6 @@ export default function RootLayout({ children }) {
               </ChakraProvider>
             </body>
           </html>
-        </NextAuthProvider>
       </StoreProvider>
     </React.StrictMode>
   );

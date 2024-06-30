@@ -10,8 +10,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export function Start() {
   const {
@@ -27,12 +27,12 @@ export function Start() {
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const router = useRouter();
 
+
   useEffect(() => {
     if (isLoggedIn) {
-      router.push("/home");
+      router.push('/home');
     }
-  }, [isLoggedIn]);
-
+  }, [isLoggedIn])
   return (
     <Box
       minHeight={"100vh"}

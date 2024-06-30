@@ -19,7 +19,7 @@ export const login = createAsyncThunk("user/login", async (data) => {
     body: JSON.stringify(data),
   });
   const responseData = await response.json();
-  return responseData.user;
+  return responseData;
 });
 
 export const signup = createAsyncThunk("user/signup", async (data) => {
@@ -31,11 +31,11 @@ export const signup = createAsyncThunk("user/signup", async (data) => {
     body: JSON.stringify(data),
   });
   const responseData = await response.json();
-  return responseData.user;
+  return responseData;
 });
 
 export const userSlice = createSlice({
-  name: "auth",
+  name: "user",
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {

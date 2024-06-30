@@ -15,11 +15,10 @@ import {
   Input,
   Select,
   Box,
-  IconButton
-} from '@chakra-ui/react';
-import { CloseIcon } from '@chakra-ui/icons';
+  IconButton,
+} from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
-
 
 export function TransactionModal({
   open,
@@ -30,19 +29,18 @@ export function TransactionModal({
   const [transactionData, setTransactionData] = useState({
     payment: "",
     type: "",
-    price: 0.0,
+    amount: 0.0,
     description: "",
   });
   const [date, setDate] = useState(new Date());
 
   useEffect(() => {
-    if (transaction && Object.keys(transaction).length !== 0) {
+    if (open) {
       setTransactionData(transaction);
+      setDate(new Date(transaction.date + "T00:00:00"));
     }
-    if (transaction && transaction.date) {
-      setDate(new Date(transaction.date + "T04:00:00"));
-    }
-  }, [transaction]);
+  }, [open]);
+
 
   const payments = [
     { label: "Cash", value: "Cash", key: "Cash" },
@@ -71,8 +69,8 @@ export function TransactionModal({
       transactionData.payment === "" ||
       transactionData.type === "" ||
       transactionData.description === "" ||
-      transactionData.price === NaN ||
-      transactionData.price < 0
+      transactionData.amount === NaN ||
+      transactionData.amount < 0
     );
   };
 
@@ -80,9 +78,17 @@ export function TransactionModal({
     <Modal isOpen={open} onClose={handleClose} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader display="flex" justifyContent="space-between" alignItems="center">
+        <ModalHeader
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           Add Transaction
-          <IconButton aria-label="Close modal" icon={<CloseIcon />} onClick={handleClose} />
+          <IconButton
+            aria-label="Close modal"
+            icon={<CloseIcon />}
+            onClick={handleClose}
+          />
         </ModalHeader>
         <ModalBody>
           <Box mb={4}>
@@ -135,12 +141,12 @@ export function TransactionModal({
           </FormControl>
 
           <FormControl mb={4}>
-            <FormLabel>Price</FormLabel>
+            <FormLabel>Amount</FormLabel>
             <Input
               type="number"
               placeholder="$$$"
-              name="price"
-              value={transactionData.price}
+              name="amount"
+              value={transactionData.amount}
               onChange={handleChange}
             />
           </FormControl>
@@ -151,7 +157,10 @@ export function TransactionModal({
             colorScheme="blue"
             isDisabled={invalidTransaction()}
             onClick={() => {
-              handleSubmit({...transactionData, date: date.toISOString().split('T')[0]});
+              handleSubmit({
+                ...transactionData,
+                date: date.toISOString().split("T")[0],
+              });
             }}
           >
             Submit

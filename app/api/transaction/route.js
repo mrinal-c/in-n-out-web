@@ -3,77 +3,109 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   const searchParams = request.nextUrl.searchParams;
-  const transaction = await request.json();
   let query = {
     month: searchParams.get("month"),
-    uid: searchParams.get("uid"),
+    year: searchParams.get("year")
   };
-  let url = addQueryParams(`${process.env.APP_URL}/transaction`, query);
-  let response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      accesstoken: searchParams.get("accessToken"),
-    },
-    body: JSON.stringify(transaction),
-  });
-  return NextResponse.json({ success: response.status == 200 });
+  const transaction = await request.json();
+  let url = addQueryParams(`${process.env.APP_URL}/api/transaction`, query);
+  const token = request.cookies.get("auth-token").value;
+  try {
+    let response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(transaction),
+    });
+    if (response.ok) {
+      return NextResponse.json({ status: 200 });
+    } else {
+      throw new Error("Failed API call. Redirecting to Login");
+    }
+  } catch (err) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 }
 
 export async function DELETE(request) {
   const searchParams = request.nextUrl.searchParams;
   let query = {
     _id: searchParams.get("_id"),
-    uid: searchParams.get("uid"),
-    month: searchParams.get("month"),
   };
-  let url = addQueryParams(`${process.env.APP_URL}/transaction`, query);
-  let response = await fetch(url, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      accesstoken: searchParams.get("accessToken"),
-    },
-  });
-  return NextResponse.json({ success: response.status == 200 });
+  let url = addQueryParams(`${process.env.APP_URL}/api/transaction`, query);
+  const token = request.cookies.get("auth-token").value;
+  try {
+    let response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      return NextResponse.json({ status: 200 });
+    } else {
+      throw new Error("Failed API call. Redirecting to Login");
+    }
+  } catch (err) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 }
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
   let query = {
     month: searchParams.get("month"),
-    uid: searchParams.get("uid"),
+    year: searchParams.get("year"),
+    out: searchParams.get("out"),
   };
-  let url = addQueryParams(`${process.env.APP_URL}/transaction`, query);
-  let response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      accesstoken: searchParams.get("accessToken"),
-    },
-  });
+  let url = addQueryParams(`${process.env.APP_URL}/api/transaction`, query);
+  const token = request.cookies.get("auth-token").value;
+  try {
+    let response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  let data = await response.json();
-  return NextResponse.json(data);
+    if (response.ok) {
+      let data = await response.json();
+      return NextResponse.json(data);
+    } else {
+      throw new Error("Failed API call. Redirecting to Login");
+    }
+  } catch (err) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 }
 
 export async function PUT(request) {
   const searchParams = request.nextUrl.searchParams;
   const transaction = await request.json();
   let query = {
-    month: searchParams.get("month"),
-    uid: searchParams.get("uid"),
     _id: searchParams.get("_id"),
   };
-  let url = addQueryParams(`${process.env.APP_URL}/transaction`, query);
-  let response = await fetch(url, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      accesstoken: searchParams.get("accessToken"),
-    },
-    body: JSON.stringify(transaction),
-  });
-
-  return NextResponse.json({ success: response.status == 200 });
+  let url = addQueryParams(`${process.env.APP_URL}/api/transaction`, query);
+  const token = request.cookies.get("auth-token").value;
+  try {
+    let response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(transaction),
+    });
+    if (response.ok) {
+      return NextResponse.json({ status: 200 });
+    } else {
+      throw new Error("Failed API call. Redirecting to Login");
+    }
+  } catch (err) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 }
