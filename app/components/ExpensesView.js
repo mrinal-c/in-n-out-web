@@ -11,12 +11,11 @@ import {
   Flex,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { TransactionModal } from "../components/TransactionModal";
+import { TransactionModal } from "./TransactionModal";
 import { useRouter } from "next/navigation";
-import { useSession, signIn } from "next-auth/react";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 import {
-  fetchTransactions,
+  getTransactions,
   editTransaction,
   deleteTransaction,
 } from "@/redux/slices/expensesSlice";
@@ -31,12 +30,6 @@ export function ExpensesView() {
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const user = useAppSelector((state) => state.user.user);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      dispatch(fetchTransactions({ user: user }));
-    }
-  }, [isLoggedIn]);
-
   const handleSearch = (event) => {
     setSearchText(event.target.value);
   };
@@ -50,7 +43,7 @@ export function ExpensesView() {
         transaction.description
           .toLowerCase()
           .includes(searchText.toLowerCase()) ||
-        transaction.price.toString().includes(searchText) ||
+        transaction.amount.toString().includes(searchText) ||
         transaction.payment.toLowerCase().includes(searchText.toLowerCase()) ||
         transaction.date.toLowerCase().includes(searchText.toLowerCase()) ||
         transaction.type.toLowerCase().includes(searchText.toLowerCase())
@@ -59,7 +52,7 @@ export function ExpensesView() {
   };
 
   const deleteHelper = (transaction) => {
-    dispatch(deleteTransaction({ transaction: transaction, user: user }));
+    dispatch(deleteTransaction({ transaction }));
   };
 
   const openEditModal = (transaction) => {
@@ -68,7 +61,7 @@ export function ExpensesView() {
   };
 
   const editHelper = (transaction) => {
-    dispatch(editTransaction({ transaction: transaction, user: user }));
+    dispatch(editTransaction({ transaction }));
     setModalVisible(false);
   };
 

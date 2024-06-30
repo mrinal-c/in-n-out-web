@@ -8,26 +8,27 @@ const initialState = {
   error: null,
 };
 
-export const getTableData = createAsyncThunk(
-  "expense/getTableData",
+export const getTransactions = createAsyncThunk(
+  "expense/getTransactions",
   async (data, thunkAPI) => {
-    const user = data.user;
     const month = thunkAPI.getState().date.month;
+    const year = thunkAPI.getState().date.year;
     const params = {
-      uid: user.uid,
-      accessToken: user.accessToken,
       month: month,
+      year: year,
+      out: "true"
     };
-    const url = addQueryParams("/api/tableData", params);
+    const url = addQueryParams("/api/transaction", params);
     try {
       const response = await fetch(url, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include"
       });
       const data = await response.json();
-      return data.tableData;
+      return {transactions: data.transactions, tableData: data.tableData}
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: error.message });
     }
@@ -37,14 +38,14 @@ export const getTableData = createAsyncThunk(
 export const addOut = createAsyncThunk(
   "expense/addOut",
   async (data, thunkAPI) => {
-    const user = data.user;
-    const month = thunkAPI.getState().date.month;
-    const params = {
-      uid: user.uid,
-      accessToken: user.accessToken,
-      month: month,
-    };
     const transaction = data.transaction;
+    transaction.out = true;
+    const month = thunkAPI.getState().date.month;
+    const year = thunkAPI.getState().date.year;
+    const params = {
+      month: month,
+      year: year,
+    };
     const url = addQueryParams("/api/transaction", params);
     try {
       const response = await fetch(url, {
@@ -54,39 +55,7 @@ export const addOut = createAsyncThunk(
         },
         body: JSON.stringify(transaction),
       });
-      const data = await response.json();
-      let success = data.success;
-      if (success) {
-        thunkAPI.dispatch(getTableData({ user: user}));
-      } else {
-        return thunkAPI.rejectWithValue({ error: "Failed to add expense" });
-      }
-    } catch (error) {
-      return thunkAPI.rejectWithValue({ error: error.message });
-    }
-  }
-);
-
-export const fetchTransactions = createAsyncThunk(
-  "expense/fetchTransactions",
-  async (data, thunkAPI) => {
-    const user = data.user;
-    const month = thunkAPI.getState().date.month;
-    const params = {
-      uid: user.uid,
-      accessToken: user.accessToken,
-      month: month,
-    };
-    const url = addQueryParams("/api/transaction", params);
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      return data;
+      thunkAPI.dispatch(getTransactions());
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: error.message });
     }
@@ -96,13 +65,8 @@ export const fetchTransactions = createAsyncThunk(
 export const deleteTransaction = createAsyncThunk(
   "expense/deleteTransaction",
   async (data, thunkAPI) => {
-    const user = data.user;
-    const month = thunkAPI.getState().date.month;
     const transaction = data.transaction;
     const params = {
-      uid: user.uid,
-      accessToken: user.accessToken,
-      month: month,
       _id: transaction._id,
     };
     const url = addQueryParams("/api/transaction", params);
@@ -113,14 +77,7 @@ export const deleteTransaction = createAsyncThunk(
           "Content-Type": "application/json",
         },
       });
-      const data = await response.json();
-      let success = data.success;
-      if (success) {
-        console.log("deleted, now refreshing transactions")
-        thunkAPI.dispatch(fetchTransactions({ user: user}));
-      } else {
-        return thunkAPI.rejectWithValue({ error: "Failed to add expense" });
-      }
+      thunkAPI.dispatch(getTransactions());
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: error.message });
     }
@@ -130,13 +87,8 @@ export const deleteTransaction = createAsyncThunk(
 export const editTransaction = createAsyncThunk(
   "expense/editTransaction",
   async (data, thunkAPI) => {
-    const user = data.user;
-    const month = thunkAPI.getState().date.month;
     const transaction = data.transaction;
     const params = {
-      uid: user.uid,
-      accessToken: user.accessToken,
-      month: month,
       _id: transaction._id,
     };
     const url = addQueryParams("/api/transaction", params);
@@ -148,13 +100,7 @@ export const editTransaction = createAsyncThunk(
         },
         body: JSON.stringify(transaction),
       });
-      const data = await response.json();
-      let success = data.success;
-      if (success) {
-        thunkAPI.dispatch(fetchTransactions({ user: user}));
-      } else {
-        return thunkAPI.rejectWithValue({ error: "Failed to add expense" });
-      }
+      thunkAPI.dispatch(getTransactions());
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: error.message });
     }
@@ -167,11 +113,12 @@ export const expenseSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getTableData.fulfilled, (state, action) => {
-        state.tableData = action.payload;
+      .addCase(getTransactions.fulfilled, (state, action) => {
+        state.tableData = action.payload.tableData;
+        state.expenses = action.payload.transactions.sort((a,b) => new Date(b.date) - new Date(a.date));
         state.error = null;
       })
-      .addCase(getTableData.rejected, (state, action) => {
+      .addCase(getTransactions.rejected, (state, action) => {
         state.error = action.payload;
       })
       .addCase(addOut.rejected, (state, action) => {
@@ -185,15 +132,6 @@ export const expenseSlice = createSlice({
       })
       .addCase(deleteTransaction.fulfilled, (state, action) => {
         state.error = null;
-      })
-      .addCase(fetchTransactions.fulfilled, (state, action) => {
-        state.expenses = action.payload.sort((a, b) => {
-          return new Date(b.date) - new Date(a.date);
-        });
-        state.error = null;
-      })
-      .addCase(fetchTransactions.rejected, (state, action) => {
-        state.error = action.payload.error;
       })
       .addCase(editTransaction.rejected, (state, action) => {
         state.error = action.payload.error;

@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   const credentials = await request.json();
 
-  let url = `${process.env.APP_URL}/signup`;
+  let url = `${process.env.APP_URL}/auth/signup`;
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -12,6 +12,16 @@ export async function POST(request) {
     },
     body: JSON.stringify(credentials),
   });
-  const data = await response.json();
-  return NextResponse.json(data);
+  const {user, token} = await response.json();
+  cookies().set({
+    name: 'auth-token',
+    value: token,
+    maxAge: 3600,
+    path: '/',
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict'
+  });
+
+  return NextResponse.json({...user});
 }

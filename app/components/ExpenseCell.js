@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Text, Button, Image, Flex } from '@chakra-ui/react';
 
 export function ExpenseCell({ expense, deleteTransaction, openEditModal }) {
-  const { date, description, type, price, payment } = expense;
+  const { date, description, type, amount, payment } = expense;
 
   const filename = (paymentName) => {
     switch (paymentName) {
@@ -41,7 +41,7 @@ export function ExpenseCell({ expense, deleteTransaction, openEditModal }) {
               Category: {type}
             </Text>
             <Text fontSize="md" color="gray.700">
-              Amount: ${price}
+              Amount: ${amount}
             </Text>
           </Box>
           <Box>

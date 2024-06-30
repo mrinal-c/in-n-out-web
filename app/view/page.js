@@ -1,4 +1,4 @@
-import { ExpensesView } from "./ExpensesView";
+import { ExpensesView } from "../components/ExpensesView";
 import { addQueryParams } from "../../redux/utils";
 import { Suspense } from "react";
 

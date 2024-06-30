@@ -19,8 +19,8 @@ import { TransactionModal } from "./TransactionModal";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
-import { getTableData, addOut } from "@/redux/slices/expensesSlice";
-import { setMonth, changeYear } from "@/redux/slices/dateSlice";
+import { getTransactions, addOut } from "@/redux/slices/expensesSlice";
+import { setMonth, setYear } from "@/redux/slices/dateSlice";
 
 export function OutView() {
   const tableData = useAppSelector((state) => state.expense.tableData);
@@ -28,38 +28,27 @@ export function OutView() {
   const month = useAppSelector((state) => state.date.month);
   const year = useAppSelector((state) => state.date.year);
   const [modalVisible, setModalVisible] = useState(false);
-  const error = useAppSelector((state) => state.expense.error);
   const router = useRouter();
-  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
-  const user = useAppSelector((state) => state.user.user);
-  
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      router.push("/");
-    } else {
-      dispatch(changeYear({year: year, user: user}));
-      dispatch(getTableData({ month: month, year: year, user: user }));
-    }
-  }, [isLoggedIn, month, year]);
-
+    dispatch(getTransactions());
+  }, [month, year]);
 
   const handleMonth = (event) => {
     dispatch(setMonth(event.target.value));
   };
 
   const handleYear = (event) => {
-    dispatch(changeYear({year: event.target.value, user: user}));
+    dispatch(setYear(event.target.value));
   };
 
   const handleSubmitOut = (transaction) => {
     setModalVisible(false);
-    dispatch(addOut({ transaction: transaction, user: user }));
-    // console.log(transaction);
+    dispatch(addOut({ transaction }));
   };
 
   const viewTransactions = () => {
-    router.push("/view?month=" + month);
+    router.push("/view");
   };
 
   const months = [
@@ -89,7 +78,11 @@ export function OutView() {
       >
         <FormControl>
           <FormLabel id="month-dropdown-label">Month</FormLabel>
-          <Select value={month} onChange={handleMonth} placeholder="Select month">
+          <Select
+            value={month}
+            onChange={handleMonth}
+            placeholder="Select month"
+          >
             {months.map((month) => (
               <option key={month.key} value={month.value}>
                 {month.label}
@@ -141,6 +134,13 @@ export function OutView() {
         open={modalVisible}
         handleClose={() => setModalVisible(false)}
         handleSubmit={handleSubmitOut}
+        transaction={{
+          payment: "",
+          type: "",
+          amount: 0.0,
+          description: "",
+          date: new Date().toISOString().split("T")[0]
+        }}
       />
     </Container>
   );
