@@ -5,7 +5,7 @@ import { InputControl, SubmitButton } from "formik-chakra-ui";
 import React from "react";
 import * as Yup from "yup";
 import { ModalForm } from "./ModalForm";
-import { signup } from "@/redux/slices/userSlice";
+import { signup, clearError } from "@/redux/slices/userSlice";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 
 const initialValues = {

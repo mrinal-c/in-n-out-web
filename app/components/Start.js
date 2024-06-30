@@ -8,8 +8,10 @@ import {
   Heading,
   Highlight,
   useDisclosure,
+  useToast
 } from "@chakra-ui/react";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
+import { clearError } from "@/redux/slices/userSlice";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -26,13 +28,34 @@ export function Start() {
   } = useDisclosure();
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
+  const error = useAppSelector((state) => state.user.error);
+  const toast = useToast();
+  
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.push('/home');
+      router.push("/home");
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn]);
+
+  
+
+  useEffect(() => {
+  
+    if (error) {
+      toast({
+        title: "Authentication Error",
+        description: error,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      dispatch(clearError());
+    }
+  }, [error, toast]); // Add toast to dependency array
+
+  
   return (
     <Box
       minHeight={"100vh"}

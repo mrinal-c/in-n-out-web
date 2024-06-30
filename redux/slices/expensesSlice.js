@@ -27,10 +27,13 @@ export const getTransactions = createAsyncThunk(
         },
         credentials: "include"
       });
+      if (!response.ok) {
+        throw new Error("Unknown error happened");
+      }
       const data = await response.json();
       return {transactions: data.transactions, tableData: data.tableData}
     } catch (error) {
-      return thunkAPI.rejectWithValue({ error: error.message });
+      return thunkAPI.rejectWithValue({ error: error });
     }
   }
 );
@@ -55,9 +58,12 @@ export const addOut = createAsyncThunk(
         },
         body: JSON.stringify(transaction),
       });
+      if (!response.ok) {
+        throw new Error("Unknown error happened");
+      }
       thunkAPI.dispatch(getTransactions());
     } catch (error) {
-      return thunkAPI.rejectWithValue({ error: error.message });
+      return thunkAPI.rejectWithValue({ error: error });
     }
   }
 );
@@ -77,9 +83,12 @@ export const deleteTransaction = createAsyncThunk(
           "Content-Type": "application/json",
         },
       });
+      if (!response.ok) {
+        throw new Error("Unknown error happened");
+      }
       thunkAPI.dispatch(getTransactions());
     } catch (error) {
-      return thunkAPI.rejectWithValue({ error: error.message });
+      return thunkAPI.rejectWithValue({ error: error });
     }
   }
 );
@@ -100,9 +109,12 @@ export const editTransaction = createAsyncThunk(
         },
         body: JSON.stringify(transaction),
       });
+      if (!response.ok) {
+        throw new Error("Unknown error happened");
+      }
       thunkAPI.dispatch(getTransactions());
     } catch (error) {
-      return thunkAPI.rejectWithValue({ error: error.message });
+      return thunkAPI.rejectWithValue({ error: error });
     }
   }
 );

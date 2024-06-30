@@ -5,8 +5,9 @@ import { InputControl, SubmitButton } from "formik-chakra-ui";
 import React from "react";
 import * as Yup from "yup";
 import { ModalForm } from "./ModalForm";
-import { login } from "@/redux/slices/userSlice";
+import { login, clearError } from "@/redux/slices/userSlice";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
+
 
 const initialValues = {
   email: "",
@@ -27,6 +28,7 @@ export function SignIn({ isOpen, onClose }) {
     dispatch(login(values));
   };
 
+  
   return (
     <ModalForm
       initialRef={initialRef}
