@@ -1,35 +1,34 @@
 "use client";
-import {
-  Container,
-  Select,
-  FormControl,
-  FormLabel,
-  Button,
-  CircularProgress,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from "@chakra-ui/react";
+
 import { ExpenseTable } from "./ExpenseTable";
 import { TransactionModal } from "./TransactionModal";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
-import { getTransactions, addOut } from "@/redux/slices/expensesSlice";
-import { setMonth, setYear } from "@/redux/slices/dateSlice";
+import { useAppSelector, useAppDispatch, useAppStore } from "../../redux/hooks";
+import { getTransactions, addOut } from "../../redux/slices/expensesSlice";
+import { setMonth, setYear } from "../../redux/slices/dateSlice";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select";
 
 export function OutView() {
-  const tableData = useAppSelector((state) => state.expense.tableData);
+  //hooks
   const dispatch = useAppDispatch();
-  const month = useAppSelector((state) => state.date.month);
-  const year = useAppSelector((state) => state.date.year);
-  const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
 
+  //redux state
+  const tableData = useAppSelector((state) => state.expense.tableData);
+  const { month, year } = useAppSelector((state) => state.date);
+
+  //local state
+  const [modalVisible, setModalVisible] = useState(false);
+
+  //fetch transactions on page load and when month/year change
   useEffect(() => {
     dispatch(getTransactions());
   }, [month, year]);
@@ -52,96 +51,117 @@ export function OutView() {
   };
 
   const months = [
-    { label: "Jan", value: "Jan", key: "Jan" },
-    { label: "Feb", value: "Feb", key: "Feb" },
-    { label: "Mar", value: "Mar", key: "Mar" },
-    { label: "Apr", value: "Apr", key: "Apr" },
-    { label: "May", value: "May", key: "May" },
-    { label: "Jun", value: "Jun", key: "Jun" },
-    { label: "Jul", value: "Jul", key: "Jul" },
-    { label: "Aug", value: "Aug", key: "Aug" },
-    { label: "Sep", value: "Sep", key: "Sep" },
-    { label: "Oct", value: "Oct", key: "Oct" },
-    { label: "Nov", value: "Nov", key: "Nov" },
-    { label: "Dec", value: "Dec", key: "Dec" },
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
-  const years = [
-    { label: "2023", value: "2023", key: "2023" },
-    { label: "2024", value: "2024", key: "2024" },
-  ];
+  const years = ["2024"]
 
   return (
-    <Container maxW="sm" mt="50px">
-      <div
-        style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
-      >
-        <FormControl>
-          <FormLabel id="month-dropdown-label">Month</FormLabel>
-          <Select
-            value={month}
-            onChange={handleMonth}
-            placeholder="Select month"
-          >
+    <div className="h-screen p-10">
+      <div className="flex gap-2">
+        <Select defaultValue={month}>
+          <SelectTrigger>
+            <SelectValue>{month}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
             {months.map((month) => (
-              <option key={month.key} value={month.value}>
-                {month.label}
-              </option>
+              <SelectItem key={month} value={month}>{month}</SelectItem>
             ))}
-          </Select>
-        </FormControl>
-
-        <FormControl>
-          <FormLabel id="year-dropdown-label">Year</FormLabel>
-          <Select value={year} onChange={handleYear} placeholder="Select year">
+          </SelectContent>
+        </Select>
+        <Select defaultValue={year}>
+          <SelectTrigger>
+            <SelectValue>{year}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
             {years.map((year) => (
-              <option key={year.key} value={year.value}>
-                {year.label}
-              </option>
+              <SelectItem key={year} value={year}>{year}</SelectItem>
             ))}
-          </Select>
-        </FormControl>
+          </SelectContent>
+        </Select>
       </div>
+    </div>
+    // <Container maxW="sm" mt="50px">
+    //   <div
+    //     style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
+    //   >
+    //     <FormControl>
+    //       <FormLabel id="month-dropdown-label">Month</FormLabel>
+    //       <Select
+    //         value={month}
+    //         onChange={handleMonth}
+    //         placeholder="Select month"
+    //       >
+    //         {months.map((month) => (
+    //           <option key={month.key} value={month.value}>
+    //             {month.label}
+    //           </option>
+    //         ))}
+    //       </Select>
+    //     </FormControl>
 
-      {tableData && Object.keys(tableData).length > 0 ? (
-        <ExpenseTable amounts={tableData} />
-      ) : (
-        <CircularProgress isIndeterminate size="small" />
-      )}
+    //     <FormControl>
+    //       <FormLabel id="year-dropdown-label">Year</FormLabel>
+    //       <Select value={year} onChange={handleYear} placeholder="Select year">
+    //         {years.map((year) => (
+    //           <option key={year.key} value={year.value}>
+    //             {year.label}
+    //           </option>
+    //         ))}
+    //       </Select>
+    //     </FormControl>
+    //   </div>
 
-      <div
-        style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
-      >
-        <Button
-          onClick={() => setModalVisible(true)}
-          colorScheme="green"
-          mr={5}
-          isDisabled={!month}
-        >
-          Add
-        </Button>
+    //   {tableData && Object.keys(tableData).length > 0 ? (
+    //     <ExpenseTable amounts={tableData} />
+    //   ) : (
+    //     <CircularProgress isIndeterminate size="small" />
+    //   )}
 
-        <Button
-          onClick={viewTransactions}
-          colorScheme="red"
-          isDisabled={!month}
-        >
-          View
-        </Button>
-      </div>
+    //   <div
+    //     style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
+    //   >
+    //     <Button
+    //       onClick={() => setModalVisible(true)}
+    //       colorScheme="green"
+    //       mr={5}
+    //       isDisabled={!month}
+    //     >
+    //       Add
+    //     </Button>
 
-      <TransactionModal
-        open={modalVisible}
-        handleClose={() => setModalVisible(false)}
-        handleSubmit={handleSubmitOut}
-        transaction={{
-          payment: "",
-          type: "",
-          amount: 0.0,
-          description: "",
-          date: new Date().toISOString().split("T")[0]
-        }}
-      />
-    </Container>
+    //     <Button
+    //       onClick={viewTransactions}
+    //       colorScheme="red"
+    //       isDisabled={!month}
+    //     >
+    //       View
+    //     </Button>
+    //   </div>
+
+    //   <TransactionModal
+    //     open={modalVisible}
+    //     handleClose={() => setModalVisible(false)}
+    //     handleSubmit={handleSubmitOut}
+    //     transaction={{
+    //       payment: "",
+    //       type: "",
+    //       amount: 0.0,
+    //       description: "",
+    //       date: new Date().toISOString().split("T")[0]
+    //     }}
+    //   />
+    // </Container>
   );
 }

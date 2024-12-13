@@ -1,24 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ExpenseCell } from "./ExpenseCell";
-import {
-  Box,
-  Button,
-  Input,
-  Grid,
-  GridItem,
-  Container,
-  Flex,
-  SimpleGrid,
-} from "@chakra-ui/react";
+
 import { TransactionModal } from "./TransactionModal";
 import { useRouter } from "next/navigation";
-import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
-import {
-  getTransactions,
-  editTransaction,
-  deleteTransaction,
-} from "@/redux/slices/expensesSlice";
+import { useAppSelector, useAppDispatch, useAppStore } from "../../redux/hooks";
+import { editTransaction, getTransactions, deleteTransaction } from "../../redux/slices/expensesSlice";
+
 
 export function ExpensesView() {
   const dispatch = useAppDispatch();
@@ -66,38 +54,39 @@ export function ExpensesView() {
   };
 
   return (
-    <Container mt="50px" pl="50px" pr="50px" maxW="full">
-      <Flex justifyContent="space-between" mb={4}>
-        <Button colorScheme="red" onClick={() => router.push("/home")} mr="1rem">
-          Back
-        </Button>
-        <Input
-          id="outlined-basic"
-          placeholder="Filter"
-          value={searchText}
-          onChange={handleSearch}
-          variant="outline"
-        />
-      </Flex>
-      {/* <Box mt="20px" display="flex" justifyContent="center"> */}
-      <SimpleGrid minChildWidth="200px" spacing={4}>
-        {filterTransactions(transactions).map((transaction) => (
-          <Box key={transaction._id} maxW="500px">
-            <ExpenseCell
-              expense={transaction}
-              deleteTransaction={deleteHelper}
-              openEditModal={openEditModal}
-            />
-          </Box>
-        ))}
-      </SimpleGrid>
-      {/* </Box> */}
-      <TransactionModal
-        open={modalVisible}
-        handleClose={() => setModalVisible(false)}
-        handleSubmit={editHelper}
-        transaction={transactionToEdit}
-      />
-    </Container>
+    <div></div>
+    // <Container mt="50px" pl="50px" pr="50px" maxW="full">
+    //   <Flex justifyContent="space-between" mb={4}>
+    //     <Button colorScheme="red" onClick={() => router.push("/home")} mr="1rem">
+    //       Back
+    //     </Button>
+    //     <Input
+    //       id="outlined-basic"
+    //       placeholder="Filter"
+    //       value={searchText}
+    //       onChange={handleSearch}
+    //       variant="outline"
+    //     />
+    //   </Flex>
+    //   {/* <Box mt="20px" display="flex" justifyContent="center"> */}
+    //   <SimpleGrid minChildWidth="200px" spacing={4}>
+    //     {filterTransactions(transactions).map((transaction) => (
+    //       <Box key={transaction._id} maxW="500px">
+    //         <ExpenseCell
+    //           expense={transaction}
+    //           deleteTransaction={deleteHelper}
+    //           openEditModal={openEditModal}
+    //         />
+    //       </Box>
+    //     ))}
+    //   </SimpleGrid>
+    //   {/* </Box> */}
+    //   <TransactionModal
+    //     open={modalVisible}
+    //     handleClose={() => setModalVisible(false)}
+    //     handleSubmit={editHelper}
+    //     transaction={transactionToEdit}
+    //   />
+    // </Container>
   );
 }

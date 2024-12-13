@@ -1,24 +1,6 @@
 // components/TransactionModal.js
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Box,
-  IconButton,
-} from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
-import { SingleDatepicker } from "chakra-dayzed-datepicker";
 
 export function TransactionModal({
   open,
@@ -75,98 +57,99 @@ export function TransactionModal({
   };
 
   return (
-    <Modal isOpen={open} onClose={handleClose} isCentered>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          Add Transaction
-          <IconButton
-            aria-label="Close modal"
-            icon={<CloseIcon />}
-            onClick={handleClose}
-          />
-        </ModalHeader>
-        <ModalBody>
-          <Box mb={4}>
-            <FormControl>
-              <FormLabel>Date</FormLabel>
-              <SingleDatepicker date={date} onDateChange={setDate} />
-            </FormControl>
-          </Box>
+    <div></div>
+    // <Modal isOpen={open} onClose={handleClose} isCentered>
+    //   <ModalOverlay />
+    //   <ModalContent>
+    //     <ModalHeader
+    //       display="flex"
+    //       justifyContent="space-between"
+    //       alignItems="center"
+    //     >
+    //       Add Transaction
+    //       <IconButton
+    //         aria-label="Close modal"
+    //         icon={<CloseIcon />}
+    //         onClick={handleClose}
+    //       />
+    //     </ModalHeader>
+    //     <ModalBody>
+    //       <Box mb={4}>
+    //         <FormControl>
+    //           <FormLabel>Date</FormLabel>
+    //           <SingleDatepicker date={date} onDateChange={setDate} />
+    //         </FormControl>
+    //       </Box>
 
-          <FormControl mb={4}>
-            <FormLabel>Description</FormLabel>
-            <Input
-              placeholder="Description"
-              name="description"
-              value={transactionData.description}
-              onChange={handleChange}
-            />
-          </FormControl>
+    //       <FormControl mb={4}>
+    //         <FormLabel>Description</FormLabel>
+    //         <Input
+    //           placeholder="Description"
+    //           name="description"
+    //           value={transactionData.description}
+    //           onChange={handleChange}
+    //         />
+    //       </FormControl>
 
-          <FormControl mb={4}>
-            <FormLabel>Type</FormLabel>
-            <Select
-              placeholder="Select type"
-              name="type"
-              value={transactionData.type}
-              onChange={handleChange}
-            >
-              {types.map((type) => (
-                <option key={type.key} value={type.value}>
-                  {type.label}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
+    //       <FormControl mb={4}>
+    //         <FormLabel>Type</FormLabel>
+    //         <Select
+    //           placeholder="Select type"
+    //           name="type"
+    //           value={transactionData.type}
+    //           onChange={handleChange}
+    //         >
+    //           {types.map((type) => (
+    //             <option key={type.key} value={type.value}>
+    //               {type.label}
+    //             </option>
+    //           ))}
+    //         </Select>
+    //       </FormControl>
 
-          <FormControl mb={4}>
-            <FormLabel>Payment</FormLabel>
-            <Select
-              placeholder="Select payment method"
-              name="payment"
-              value={transactionData.payment}
-              onChange={handleChange}
-            >
-              {payments.map((payment) => (
-                <option key={payment.key} value={payment.value}>
-                  {payment.label}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
+    //       <FormControl mb={4}>
+    //         <FormLabel>Payment</FormLabel>
+    //         <Select
+    //           placeholder="Select payment method"
+    //           name="payment"
+    //           value={transactionData.payment}
+    //           onChange={handleChange}
+    //         >
+    //           {payments.map((payment) => (
+    //             <option key={payment.key} value={payment.value}>
+    //               {payment.label}
+    //             </option>
+    //           ))}
+    //         </Select>
+    //       </FormControl>
 
-          <FormControl mb={4}>
-            <FormLabel>Amount</FormLabel>
-            <Input
-              type="number"
-              placeholder="$$$"
-              name="amount"
-              value={transactionData.amount}
-              onChange={handleChange}
-            />
-          </FormControl>
-        </ModalBody>
+    //       <FormControl mb={4}>
+    //         <FormLabel>Amount</FormLabel>
+    //         <Input
+    //           type="number"
+    //           placeholder="$$$"
+    //           name="amount"
+    //           value={transactionData.amount}
+    //           onChange={handleChange}
+    //         />
+    //       </FormControl>
+    //     </ModalBody>
 
-        <ModalFooter>
-          <Button
-            colorScheme="blue"
-            isDisabled={invalidTransaction()}
-            onClick={() => {
-              handleSubmit({
-                ...transactionData,
-                date: date.toISOString().split("T")[0],
-              });
-            }}
-          >
-            Submit
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    //     <ModalFooter>
+    //       <Button
+    //         colorScheme="blue"
+    //         isDisabled={invalidTransaction()}
+    //         onClick={() => {
+    //           handleSubmit({
+    //             ...transactionData,
+    //             date: date.toISOString().split("T")[0],
+    //           });
+    //         }}
+    //       >
+    //         Submit
+    //       </Button>
+    //     </ModalFooter>
+    //   </ModalContent>
+    // </Modal>
   );
 }
