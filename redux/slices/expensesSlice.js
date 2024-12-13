@@ -30,8 +30,9 @@ export const getTransactions = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Unknown error happened");
       }
-      const data = await response.json();
-      return {transactions: data.transactions, tableData: data.tableData}
+      const { transactions, tableData } = await response.json();
+
+      return {transactions: transactions, tableData: tableData}
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: error });
     }

@@ -1,23 +1,86 @@
 // components/ExpenseTable.js
-'use client';
-import React from 'react';
+"use client";
+import React, { useMemo } from "react";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 
-export function ExpenseTable({ amounts }) {
-  const categories = ["Food", "Groceries", "Travel", "Big Ticket", "Personal", "TotalNoBT"];
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../components/ui/table";
+
+export function ExpenseTable({ tableData }) {
+  // const categories = ["Food", "Groceries", "Travel", "Big Ticket", "Personal", "TotalNoBT"];
+
+  const data = useMemo(() => {
+    return Object.entries(tableData).map(([key, value]) => ({
+      category: key,
+      id: key,
+      amount: value,
+    }));
+  }, [tableData]);
+
+  const columns = [
+    {
+      accessorKey: "category",
+      header: "Category",
+    },
+    {
+      accessorKey: "amount",
+      header: "Amount",
+    },
+  ];
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   return (
-    <div></div>
-    // <TableContainer as={Box} mt="10">
-    //   <Table variant="striped" colorScheme="gray">
-    //     <Tbody>
-    //       {categories.map((category, index) => (
-    //         <Tr key={index}>
-    //           <Td>{category}</Td>
-    //           <Td isNumeric>{amounts[category]}</Td>
-    //         </Tr>
-    //       ))}
-    //     </Tbody>
-    //   </Table>
-    // </TableContainer>
+    <div className="rounded-md border w-1/2">
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows.map((row) => (
+            <TableRow
+              key={row.id}
+              data-state={row.getIsSelected() && "selected"}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

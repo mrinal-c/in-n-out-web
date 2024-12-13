@@ -33,8 +33,8 @@ export function OutView() {
     dispatch(getTransactions());
   }, [month, year]);
 
-  const handleMonth = (event) => {
-    dispatch(setMonth(event.target.value));
+  const handleMonth = (newMonth) => {
+    dispatch(setMonth(newMonth));
   };
 
   const handleYear = (event) => {
@@ -65,33 +65,42 @@ export function OutView() {
     "Dec",
   ];
 
-  const years = ["2024"]
+  const years = ["2024"];
 
   return (
-    <div className="h-screen p-10">
-      <div className="flex gap-2">
-        <Select defaultValue={month}>
-          <SelectTrigger>
+    <>
+      <p className="text-3xl font-semibold">Dashboard</p>
+      <div className="flex gap-6 justify-center">
+        <Select defaultValue={month} onValueChange={handleMonth}>
+          <SelectTrigger className="w-min">
             <SelectValue>{month}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             {months.map((month) => (
-              <SelectItem key={month} value={month}>{month}</SelectItem>
+              <SelectItem key={month} value={month}>
+                {month}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select defaultValue={year}>
-          <SelectTrigger>
+          <SelectTrigger className="w-min">
             <SelectValue>{year}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             {years.map((year) => (
-              <SelectItem key={year} value={year}>{year}</SelectItem>
+              <SelectItem key={year} value={year}>
+                {year}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
-    </div>
+
+      <div className="flex mt-4 justify-center">
+        <ExpenseTable tableData={tableData}/>
+      </div>
+    </>
     // <Container maxW="sm" mt="50px">
     //   <div
     //     style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}

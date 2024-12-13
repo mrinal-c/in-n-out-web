@@ -58,9 +58,7 @@ export const SignInDialog = () => {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button>Sign In</Button>
-      </DialogTrigger>
+      <DialogTrigger className="border-2 border-black rounded-sm px-2 py-1">Sign In</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Sign Into In-N-Out</DialogTitle>

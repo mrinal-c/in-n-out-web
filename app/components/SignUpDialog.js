@@ -58,8 +58,7 @@ export const SignUpDialog = () => {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button>Sign Up</Button>
+      <DialogTrigger  className="border-2 border-black rounded-sm px-2 py-1">Sign Up
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
