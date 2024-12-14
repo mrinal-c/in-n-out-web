@@ -1,8 +1,14 @@
 'use client';
 import React from 'react';
+import {Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,} from "../../components/ui/card";
 
-export function ExpenseCell({ expense, deleteTransaction, openEditModal }) {
-  const { date, description, type, amount, payment } = expense;
+export function ExpenseCell({ out }) {
+  const { date, description, type, amount, payment } = out;
 
   const filename = (paymentName) => {
     switch (paymentName) {
@@ -21,47 +27,17 @@ export function ExpenseCell({ expense, deleteTransaction, openEditModal }) {
     }
   };
 
-  const handleDelete = () => {
-    deleteTransaction(expense);
-  };
-
   return (
-    <div></div>
-    // <Box borderWidth="1px" borderRadius="md" overflow="hidden" mb={4}>
-    //   <Box p={4}>
-    //     <Flex alignItems="center" justifyContent="space-between">
-    //       <Box>
-    //         <Text fontSize="xl" fontWeight="semibold" mb={2}>
-    //           {description}
-    //         </Text>
-    //         <Text fontSize="sm" color="gray.500" mb={2}>
-    //           Date: {date}
-    //         </Text>
-    //         <Text fontSize="sm" color="gray.500" mb={2}>
-    //           Category: {type}
-    //         </Text>
-    //         <Text fontSize="md" color="gray.700">
-    //           Amount: ${amount}
-    //         </Text>
-    //       </Box>
-    //       <Box>
-    //         <Image src={`/${filename(payment)}`} alt={payment} boxSize="50px" />
-    //       </Box>
-    //     </Flex>
-    //     <Flex justifyContent="flex-end" mt={4}>
-    //       <Button
-    //         variant="outline"
-    //         colorScheme="blue"
-    //         onClick={() => openEditModal(expense)}
-    //         mr={2}
-    //       >
-    //         Edit
-    //       </Button>
-    //       <Button variant="outline" colorScheme="red" onClick={handleDelete}>
-    //         Delete
-    //       </Button>
-    //     </Flex>
-    //   </Box>
-    // </Box>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {description}
+        </CardTitle>
+        <CardDescription>{new Date(date)}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {amount}
+      </CardContent>
+    </Card>
   );
 }

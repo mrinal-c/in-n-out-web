@@ -2,21 +2,28 @@
 import { useState, useEffect } from "react";
 import { ExpenseCell } from "./ExpenseCell";
 
-import { TransactionModal } from "./TransactionModal";
+
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch, useAppStore } from "../../redux/hooks";
-import { editTransaction, getTransactions, deleteTransaction } from "../../redux/slices/expensesSlice";
-
+import {
+  editTransaction,
+  getTransactions,
+  deleteTransaction,
+} from "../../redux/slices/expensesSlice";
 
 export function ExpensesView() {
+  //hooks
   const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  //redux state
   const transactions = useAppSelector((state) => state.expense.expenses);
+  const { isLoggedIn, user } = useAppSelector((state) => state.user);
+
+  //local state
   const [transactionToEdit, setTransactionToEdit] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const router = useRouter();
-  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
-  const user = useAppSelector((state) => state.user.user);
 
   const handleSearch = (event) => {
     setSearchText(event.target.value);
@@ -39,54 +46,13 @@ export function ExpensesView() {
     });
   };
 
-  const deleteHelper = (transaction) => {
-    dispatch(deleteTransaction({ transaction }));
-  };
-
-  const openEditModal = (transaction) => {
-    setTransactionToEdit(transaction);
-    setModalVisible(true);
-  };
-
-  const editHelper = (transaction) => {
-    dispatch(editTransaction({ transaction }));
-    setModalVisible(false);
-  };
-
   return (
-    <div></div>
-    // <Container mt="50px" pl="50px" pr="50px" maxW="full">
-    //   <Flex justifyContent="space-between" mb={4}>
-    //     <Button colorScheme="red" onClick={() => router.push("/home")} mr="1rem">
-    //       Back
-    //     </Button>
-    //     <Input
-    //       id="outlined-basic"
-    //       placeholder="Filter"
-    //       value={searchText}
-    //       onChange={handleSearch}
-    //       variant="outline"
-    //     />
-    //   </Flex>
-    //   {/* <Box mt="20px" display="flex" justifyContent="center"> */}
-    //   <SimpleGrid minChildWidth="200px" spacing={4}>
-    //     {filterTransactions(transactions).map((transaction) => (
-    //       <Box key={transaction._id} maxW="500px">
-    //         <ExpenseCell
-    //           expense={transaction}
-    //           deleteTransaction={deleteHelper}
-    //           openEditModal={openEditModal}
-    //         />
-    //       </Box>
-    //     ))}
-    //   </SimpleGrid>
-    //   {/* </Box> */}
-    //   <TransactionModal
-    //     open={modalVisible}
-    //     handleClose={() => setModalVisible(false)}
-    //     handleSubmit={editHelper}
-    //     transaction={transactionToEdit}
-    //   />
-    // </Container>
-  );
+  <div className="h-screen p-8">
+    Hey
+    <div className="grid grid-cols-4 gap-4">
+      {transactions.map((transaction) => (
+        <ExpenseCell out={transaction}/>
+      ))}
+    </div>
+  </div>);
 }
