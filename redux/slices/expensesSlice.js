@@ -42,8 +42,7 @@ export const getTransactions = createAsyncThunk(
 export const addOut = createAsyncThunk(
   "expense/addOut",
   async (data, thunkAPI) => {
-    const transaction = data.transaction;
-    transaction.out = true;
+    const transaction = { ...data, out: true}
     const month = thunkAPI.getState().date.month;
     const year = thunkAPI.getState().date.year;
     const params = {
@@ -135,7 +134,7 @@ export const expenseSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(addOut.rejected, (state, action) => {
-        state.error = action.payload.error;
+        state.error = action.payload.error || action.payload;
       })
       .addCase(addOut.fulfilled, (state, action) => {
         state.error = null;

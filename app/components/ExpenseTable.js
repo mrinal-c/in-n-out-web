@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "../../components/ui/table";
 
-export function ExpenseTable({ tableData }) {
+export function ExpenseTable({ tableData, ...props }) {
   // const categories = ["Food", "Groceries", "Travel", "Big Ticket", "Personal", "TotalNoBT"];
 
   const data = useMemo(() => {
@@ -46,7 +46,7 @@ export function ExpenseTable({ tableData }) {
   });
 
   return (
-    <div className="rounded-md border w-1/2">
+    <div {...props}>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

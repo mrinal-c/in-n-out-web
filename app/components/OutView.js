@@ -1,13 +1,13 @@
 "use client";
 
 import { ExpenseTable } from "./ExpenseTable";
-import { TransactionModal } from "./TransactionModal";
+import { TransactionDialog } from "./TransactionDialog";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch, useAppStore } from "../../redux/hooks";
 import { getTransactions, addOut } from "../../redux/slices/expensesSlice";
 import { setMonth, setYear } from "../../redux/slices/dateSlice";
-
+import { Button } from "../../components/ui/button";
 import {
   Select,
   SelectContent,
@@ -37,13 +37,8 @@ export function OutView() {
     dispatch(setMonth(newMonth));
   };
 
-  const handleYear = (event) => {
-    dispatch(setYear(event.target.value));
-  };
-
-  const handleSubmitOut = (transaction) => {
-    setModalVisible(false);
-    dispatch(addOut({ transaction }));
+  const handleYear = (newYear) => {
+    dispatch(setYear(newYear));
   };
 
   const viewTransactions = () => {
@@ -68,8 +63,8 @@ export function OutView() {
   const years = ["2024"];
 
   return (
-    <>
-      <p className="text-3xl font-semibold">Dashboard</p>
+    <div className="flex flex-col items-center gap-6">
+      <p className="text-3xl font-semibold self-start">Dashboard</p>
       <div className="flex gap-6 justify-center">
         <Select defaultValue={month} onValueChange={handleMonth}>
           <SelectTrigger className="w-min">
@@ -83,7 +78,7 @@ export function OutView() {
             ))}
           </SelectContent>
         </Select>
-        <Select defaultValue={year}>
+        <Select defaultValue={year} onValueChange={handleYear}>
           <SelectTrigger className="w-min">
             <SelectValue>{year}</SelectValue>
           </SelectTrigger>
@@ -97,10 +92,14 @@ export function OutView() {
         </Select>
       </div>
 
-      <div className="flex mt-4 justify-center">
-        <ExpenseTable tableData={tableData}/>
+      <ExpenseTable tableData={tableData} className="rounded-md border w-1/3" />
+
+      <div className="flex gap-4">
+        <TransactionDialog />
+
+        <Button>View</Button>
       </div>
-    </>
+    </div>
     // <Container maxW="sm" mt="50px">
     //   <div
     //     style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}

@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter, Timmana, K2D } from "next/font/google";
 import StoreProvider from "../redux/StoreProvider";
 import React from "react";
 import { Toaster } from "../components/ui/toaster";
