@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ExpenseCell } from "@/app/components/ExpenseCell";
+import { OutCard } from "@/app/components/OutCard";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 import {
   editTransaction,
@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 
 
 
-export const ExpensesView = () => {
+export const OutsView = () => {
   //hooks
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -63,7 +63,7 @@ export const ExpensesView = () => {
       </div>
       <div className="grid grid-cols-4 gap-4">
         {filterTransactions().map((transaction) => (
-          <ExpenseCell key={transaction._id} out={transaction} />
+          <OutCard key={transaction._id} out={transaction} />
         ))}
       </div>
     </div>

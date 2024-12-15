@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export function ExpenseTable({ tableData, ...props }) {
+export function OutTable({ tableData, ...props }) {
   // const categories = ["Food", "Groceries", "Travel", "Big Ticket", "Personal", "TotalNoBT"];
 
   const data = useMemo(() => {

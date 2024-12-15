@@ -54,7 +54,7 @@ const types = [
 ];
 const payments = ["Cash", "AMEX Card", "Citi Card", "Ally Card", "Venmo"];
 
-export const TransactionDialog = ({ out }) => {
+export const OutForm = ({ out }) => {
   //hooks
   const dispatch = useAppDispatch();
 

@@ -7,8 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ExpenseTable } from "@/app/components/ExpenseTable";
-import { TransactionDialog } from "@/app/components/TransactionDialog";
+import { OutTable } from "@/app/components/OutTable";
+import { OutForm } from "@/app/components/OutForm";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 import { getTransactions, addOut } from "@/redux/slices/expensesSlice";
 import { setMonth, setYear } from "@/redux/slices/dateSlice";
@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 
 
 
-export function OutView() {
+export const HomeView = () => {
   //hooks
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -93,12 +93,12 @@ export function OutView() {
         </Select>
       </div>
 
-      <ExpenseTable tableData={tableData} className="rounded-md border w-1/3" />
+      <OutTable tableData={tableData} className="rounded-md border w-1/3" />
 
       <div className="flex gap-4">
-        <TransactionDialog />
+        <OutForm />
 
-        <Button variant="link" onClick={() => router.push("/view")}>View</Button>
+        <Button onClick={() => router.push("/view")}>View</Button>
       </div>
     </div>
   );

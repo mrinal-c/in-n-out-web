@@ -7,9 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TransactionDialog } from "@/app/components/TransactionDialog";
+import { OutForm } from "@/app/components/OutForm.js";
 
-export function ExpenseCell({ out }) {
+export function OutCard({ out }) {
   const { date, description, type, amount, payment } = out;
 
   const filename = (paymentName) => {
@@ -40,7 +40,7 @@ export function ExpenseCell({ out }) {
       <CardContent>
         <div className="flex justify-between">
           <p>${amount}</p>
-          <TransactionDialog out={out} />
+          <OutForm out={out} />
         </div>
       </CardContent>
     </Card>
