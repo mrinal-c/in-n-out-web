@@ -1,9 +1,9 @@
-import { Inter, Timmana, K2D } from "next/font/google";
-import StoreProvider from "../redux/StoreProvider";
+import { Inter } from "next/font/google";
+import StoreProvider from "@/redux/StoreProvider";
 import React from "react";
-import { Toaster } from "../components/ui/toaster";
+import { Toaster } from "@/components/ui/toaster";
 
-import "../app/globals.css";
+import "@/app/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

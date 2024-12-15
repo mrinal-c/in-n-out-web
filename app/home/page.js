@@ -1,4 +1,4 @@
-import { OutView } from "../components/OutView";
+import { OutView } from "@/app/components/OutView";
 
 export default function Home() {
   return (

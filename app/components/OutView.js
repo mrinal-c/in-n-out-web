@@ -1,20 +1,21 @@
 "use client";
-
-import { ExpenseTable } from "./ExpenseTable";
-import { TransactionDialog } from "./TransactionDialog";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAppSelector, useAppDispatch, useAppStore } from "../../redux/hooks";
-import { getTransactions, addOut } from "../../redux/slices/expensesSlice";
-import { setMonth, setYear } from "../../redux/slices/dateSlice";
-import { Button } from "../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/select";
+} from "@/components/ui/select";
+import { ExpenseTable } from "@/app/components/ExpenseTable";
+import { TransactionDialog } from "@/app/components/TransactionDialog";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
+import { getTransactions, addOut } from "@/redux/slices/expensesSlice";
+import { setMonth, setYear } from "@/redux/slices/dateSlice";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+
 
 export function OutView() {
   //hooks

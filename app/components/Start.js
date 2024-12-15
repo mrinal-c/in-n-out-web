@@ -1,12 +1,11 @@
 "use client";
-import { SignInDialog } from "./SignInDialog.js";
-import { SignUpDialog } from "./SignUpDialog.js";
-import { useAppSelector, useAppDispatch, useAppStore } from "../../redux/hooks.js";
-import { clearError } from "../../redux/slices/userSlice.js";
+import { SignInDialog } from "@/app/components/SignInDialog.js";
+import { SignUpDialog } from "@/app/components/SignUpDialog.js";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks.js";
+import { clearError } from "@/redux/slices/userSlice.js";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useToast } from "../../hooks/use-toast";
-import { Button } from "../../components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 
 export function Start() {

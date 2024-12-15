@@ -11,9 +11,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../components/ui/dialog";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -22,25 +22,25 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../components/ui/form";
+} from "@/components/ui/form";
 import { format } from "date-fns";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "../../components/ui/popover";
-import { cn } from "../../lib/utils";
-import { Calendar } from "../../components/ui/calendar";
-import { CalendarIcon } from "lucide-react";
-import { useAppSelector, useAppDispatch, useAppStore } from "../../redux/hooks";
-import { addOut, editTransaction } from "../../redux/slices/expensesSlice";
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { CalendarIcon, Edit } from "lucide-react";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
+import { addOut, editTransaction } from "@/redux/slices/expensesSlice";
 import {
   SelectItem,
   Select,
   SelectContent,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/select";
+} from "@/components/ui/select";
 
 //constant types and payments arrays
 const types = [
@@ -90,7 +90,7 @@ export const TransactionDialog = ({ out }) => {
     value.date = value.date.toISOString().split("T")[0];
     if (out != null) {
       console.log("updating");
-      dispatch(editTransaction({...value, _id: out._id}));
+      dispatch(editTransaction({ ...value, _id: out._id }));
     } else {
       console.log("adding new");
       dispatch(addOut(value));
@@ -100,7 +100,7 @@ export const TransactionDialog = ({ out }) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>{out != null ? "Edit" : "Add"}</DialogTrigger>
+      <DialogTrigger>{out != null ? <Edit /> : "Add"}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add an Out</DialogTitle>

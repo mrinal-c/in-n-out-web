@@ -1,10 +1,8 @@
-import { ExpensesView } from "../components/ExpensesView";
-import { addQueryParams } from "../../redux/utils";
-import { Suspense } from "react";
+import { ExpensesView } from "@/app/components/ExpensesView";
 
 export default function View() {
   return (
-    <div>
+    <div className="h-screen p-10">
       <ExpensesView />
     </div>
   );

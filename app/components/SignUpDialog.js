@@ -1,8 +1,4 @@
 "use client";
-import React, { useState } from "react";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import {
   Dialog,
   DialogContent,
@@ -10,8 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../components/ui/dialog";
-import { Button } from "../../components/ui/button";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -20,12 +16,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../components/ui/form";
-import { Input } from "../../components/ui/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
-
-import { signup, clearError } from "../../redux/slices/userSlice";
-import { useAppSelector, useAppDispatch, useAppStore } from "../../redux/hooks";
+import { signup, clearError } from "@/redux/slices/userSlice";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 
 export const SignUpDialog = () => {
   //hooks

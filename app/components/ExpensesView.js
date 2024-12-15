@@ -1,15 +1,17 @@
 "use client";
-import { useState, useEffect } from "react";
-import { ExpenseCell } from "./ExpenseCell";
-
-
-import { useRouter } from "next/navigation";
-import { useAppSelector, useAppDispatch, useAppStore } from "../../redux/hooks";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ExpenseCell } from "@/app/components/ExpenseCell";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 import {
   editTransaction,
   getTransactions,
   deleteTransaction,
-} from "../../redux/slices/expensesSlice";
+} from "@/redux/slices/expensesSlice";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+
 
 export const ExpensesView = () => {
   //hooks
@@ -50,12 +52,20 @@ export const ExpensesView = () => {
   };
 
   return (
-  <div className="h-screen p-8">
-    You have made {transactions.length} outs this month
-    <div className="grid grid-cols-4 gap-4">
-      {transactions.map((transaction) => (
-        <ExpenseCell key={transaction._id} out={transaction}/>
-      ))}
+    <div className="flex flex-col gap-6">
+      <div className="flex gap-4">
+        <Button onClick={() => router.push("/home")}>Home</Button>
+        <Input
+          placeholder="Filter"
+          value={searchText}
+          onChange={handleSearch}
+        />
+      </div>
+      <div className="grid grid-cols-4 gap-4">
+        {filterTransactions().map((transaction) => (
+          <ExpenseCell key={transaction._id} out={transaction} />
+        ))}
+      </div>
     </div>
-  </div>);
-}
+  );
+};
