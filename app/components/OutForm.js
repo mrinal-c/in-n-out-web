@@ -41,6 +41,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tag, TagInput } from "emblor";
 
 //constant types and payments arrays
 const types = [
@@ -70,6 +71,12 @@ export const OutForm = ({ out }) => {
     type: z.enum(types),
     payment: z.enum(payments),
     amount: z.coerce.number().nonnegative(),
+    tags: z.array(
+      z.object({
+        id: z.string(),
+        text: z.string(),
+      })
+    ),
   });
 
   const form = useForm({
@@ -82,6 +89,7 @@ export const OutForm = ({ out }) => {
             description: "",
             type: "",
             payment: "",
+            tags: [],
             amount: 0.0,
           },
   });
@@ -157,6 +165,30 @@ export const OutForm = ({ out }) => {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="tags"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Topics</FormLabel>
+                  <FormControl>
+                    <TagInput
+                      {...field}
+                      placeholder="Enter a tag"
+                      tags={field.value}
+                      // className="sm:min-w-[450px]"
+                      setTags={(newTags) => {
+                        form.setValue("tags", newTags);
+                      }}
+                      //  activeTagIndex={activeTagIndex}
+                      // setActiveTagIndex={setActiveTagIndex}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
