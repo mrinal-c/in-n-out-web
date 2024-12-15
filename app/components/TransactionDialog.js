@@ -33,7 +33,7 @@ import { cn } from "../../lib/utils";
 import { Calendar } from "../../components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { useAppSelector, useAppDispatch, useAppStore } from "../../redux/hooks";
-import { addOut } from "../../redux/slices/expensesSlice";
+import { addOut, editTransaction } from "../../redux/slices/expensesSlice";
 import {
   SelectItem,
   Select,
@@ -54,7 +54,7 @@ const types = [
 ];
 const payments = ["Cash", "AMEX Card", "Citi Card", "Ally Card", "Venmo"];
 
-export const TransactionDialog = () => {
+export const TransactionDialog = ({ out }) => {
   //hooks
   const dispatch = useAppDispatch();
 
@@ -74,24 +74,33 @@ export const TransactionDialog = () => {
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      date: new Date(),
-      description: "",
-      type: "",
-      payment: "",
-      amount: 0.0,
-    },
+    defaultValues:
+      out != null
+        ? { ...out, date: new Date(out.date) }
+        : {
+            date: new Date(),
+            description: "",
+            type: "",
+            payment: "",
+            amount: 0.0,
+          },
   });
 
   const onSubmit = (value) => {
     value.date = value.date.toISOString().split("T")[0];
-    dispatch(addOut(value));
+    if (out != null) {
+      console.log("updating");
+      dispatch(editTransaction({...value, _id: out._id}));
+    } else {
+      console.log("adding new");
+      dispatch(addOut(value));
+    }
     setOpen(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>Add</DialogTrigger>
+      <DialogTrigger>{out != null ? "Edit" : "Add"}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add an Out</DialogTitle>

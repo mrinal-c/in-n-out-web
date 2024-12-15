@@ -97,79 +97,8 @@ export function OutView() {
       <div className="flex gap-4">
         <TransactionDialog />
 
-        <Button>View</Button>
+        <Button variant="link" onClick={() => router.push("/view")}>View</Button>
       </div>
     </div>
-    // <Container maxW="sm" mt="50px">
-    //   <div
-    //     style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
-    //   >
-    //     <FormControl>
-    //       <FormLabel id="month-dropdown-label">Month</FormLabel>
-    //       <Select
-    //         value={month}
-    //         onChange={handleMonth}
-    //         placeholder="Select month"
-    //       >
-    //         {months.map((month) => (
-    //           <option key={month.key} value={month.value}>
-    //             {month.label}
-    //           </option>
-    //         ))}
-    //       </Select>
-    //     </FormControl>
-
-    //     <FormControl>
-    //       <FormLabel id="year-dropdown-label">Year</FormLabel>
-    //       <Select value={year} onChange={handleYear} placeholder="Select year">
-    //         {years.map((year) => (
-    //           <option key={year.key} value={year.value}>
-    //             {year.label}
-    //           </option>
-    //         ))}
-    //       </Select>
-    //     </FormControl>
-    //   </div>
-
-    //   {tableData && Object.keys(tableData).length > 0 ? (
-    //     <ExpenseTable amounts={tableData} />
-    //   ) : (
-    //     <CircularProgress isIndeterminate size="small" />
-    //   )}
-
-    //   <div
-    //     style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
-    //   >
-    //     <Button
-    //       onClick={() => setModalVisible(true)}
-    //       colorScheme="green"
-    //       mr={5}
-    //       isDisabled={!month}
-    //     >
-    //       Add
-    //     </Button>
-
-    //     <Button
-    //       onClick={viewTransactions}
-    //       colorScheme="red"
-    //       isDisabled={!month}
-    //     >
-    //       View
-    //     </Button>
-    //   </div>
-
-    //   <TransactionModal
-    //     open={modalVisible}
-    //     handleClose={() => setModalVisible(false)}
-    //     handleSubmit={handleSubmitOut}
-    //     transaction={{
-    //       payment: "",
-    //       type: "",
-    //       amount: 0.0,
-    //       description: "",
-    //       date: new Date().toISOString().split("T")[0]
-    //     }}
-    //   />
-    // </Container>
   );
 }

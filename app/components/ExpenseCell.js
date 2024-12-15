@@ -6,6 +6,8 @@ import {Card,
   CardFooter,
   CardHeader,
   CardTitle,} from "../../components/ui/card";
+import { Button } from '../../components/ui/button';
+import { TransactionDialog } from './TransactionDialog';
 
 export function ExpenseCell({ out }) {
   const { date, description, type, amount, payment } = out;
@@ -33,10 +35,11 @@ export function ExpenseCell({ out }) {
         <CardTitle>
           {description}
         </CardTitle>
-        <CardDescription>{new Date(date)}</CardDescription>
+        <CardDescription>{new Date(date).toDateString().slice(4)}</CardDescription>
       </CardHeader>
       <CardContent>
-        {amount}
+        ${amount}
+        <TransactionDialog out={out}/>
       </CardContent>
     </Card>
   );

@@ -11,7 +11,7 @@ import {
   deleteTransaction,
 } from "../../redux/slices/expensesSlice";
 
-export function ExpensesView() {
+export const ExpensesView = () => {
   //hooks
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -21,9 +21,12 @@ export function ExpensesView() {
   const { isLoggedIn, user } = useAppSelector((state) => state.user);
 
   //local state
-  const [transactionToEdit, setTransactionToEdit] = useState({});
-  const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
+
+  //fetch transactions on page load
+  useEffect(() => {
+    dispatch(getTransactions());
+  }, []);
 
   const handleSearch = (event) => {
     setSearchText(event.target.value);
@@ -48,10 +51,10 @@ export function ExpensesView() {
 
   return (
   <div className="h-screen p-8">
-    Hey
+    You have made {transactions.length} outs this month
     <div className="grid grid-cols-4 gap-4">
       {transactions.map((transaction) => (
-        <ExpenseCell out={transaction}/>
+        <ExpenseCell key={transaction._id} out={transaction}/>
       ))}
     </div>
   </div>);

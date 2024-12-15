@@ -96,7 +96,7 @@ export const deleteTransaction = createAsyncThunk(
 export const editTransaction = createAsyncThunk(
   "expense/editTransaction",
   async (data, thunkAPI) => {
-    const transaction = data.transaction;
+    const transaction = data;
     const params = {
       _id: transaction._id,
     };
@@ -134,7 +134,7 @@ export const expenseSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(addOut.rejected, (state, action) => {
-        state.error = action.payload.error || action.payload;
+        state.error = action.payload.error;
       })
       .addCase(addOut.fulfilled, (state, action) => {
         state.error = null;
