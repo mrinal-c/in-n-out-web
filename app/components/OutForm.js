@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
+import { TagInput } from "@/components/ui/tag-input";
 import { CalendarIcon, Edit } from "lucide-react";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 import { addOut, editTransaction } from "@/redux/slices/expensesSlice";
@@ -41,7 +42,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tag, TagInput } from "emblor";
 
 //constant types and payments arrays
 const types = [
@@ -68,15 +68,9 @@ export const OutForm = ({ out }) => {
     description: z.string().max(100, {
       message: "Description cannot be longer than 100 characters",
     }),
-    type: z.enum(types),
     payment: z.enum(payments),
     amount: z.coerce.number().nonnegative(),
-    tags: z.array(
-      z.object({
-        id: z.string(),
-        text: z.string(),
-      })
-    ),
+    tags: z.array(z.string()),
   });
 
   const form = useForm({
@@ -97,10 +91,8 @@ export const OutForm = ({ out }) => {
   const onSubmit = (value) => {
     value.date = value.date.toISOString().split("T")[0];
     if (out != null) {
-      console.log("updating");
       dispatch(editTransaction({ ...value, _id: out._id }));
     } else {
-      console.log("adding new");
       dispatch(addOut(value));
     }
     setOpen(false);
@@ -109,7 +101,7 @@ export const OutForm = ({ out }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>{out != null ? <Edit /> : "Add"}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Add an Out</DialogTitle>
         </DialogHeader>
@@ -179,45 +171,15 @@ export const OutForm = ({ out }) => {
                   <FormLabel>Topics</FormLabel>
                   <FormControl>
                     <TagInput
-                      {...field}
-                      placeholder="Enter a tag"
                       tags={field.value}
-                      // className="sm:min-w-[450px]"
                       setTags={(newTags) => {
                         form.setValue("tags", newTags);
                       }}
-                      //  activeTagIndex={activeTagIndex}
-                      // setActiveTagIndex={setActiveTagIndex}
-                    />
+                      maxLength={30}
+                      maxTags={5}
+                      inputField={field}
+                    ></TagInput>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {types.map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
