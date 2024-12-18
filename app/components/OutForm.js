@@ -8,6 +8,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -34,7 +35,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { TagInput } from "@/components/ui/tag-input";
 import { CalendarIcon, Edit } from "lucide-react";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
-import { addOut, editTransaction } from "@/redux/slices/expensesSlice";
+import { addOut, editTransaction, deleteTransaction } from "@/redux/slices/expensesSlice";
 import {
   SelectItem,
   Select,
@@ -68,9 +69,11 @@ export const OutForm = ({ out }) => {
     description: z.string().max(100, {
       message: "Description cannot be longer than 100 characters",
     }),
-    payment: z.enum(payments),
+    payment: z.enum(payments, { message: "Please pick a payment" }),
     amount: z.coerce.number().nonnegative(),
-    tags: z.array(z.string()),
+    tags: z
+      .array(z.string())
+      .nonempty({ message: "Must have at least one tag" }),
   });
 
   const form = useForm({
@@ -98,6 +101,11 @@ export const OutForm = ({ out }) => {
     setOpen(false);
   };
 
+  const removeOut = (e) => {
+    e.preventDefault();
+    dispatch(deleteTransaction(out));
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>{out != null ? <Edit /> : "Add"}</DialogTrigger>
@@ -106,7 +114,11 @@ export const OutForm = ({ out }) => {
           <DialogTitle>Add an Out</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form
+            id="form"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8"
+          >
             <FormField
               control={form.control}
               name="date"
@@ -226,9 +238,20 @@ export const OutForm = ({ out }) => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
           </form>
         </Form>
+        <DialogFooter>
+          <div className="flex gap-4">
+            <Button type="submit" form="form">
+              Submit
+            </Button>
+            {out != null && (
+              <Button type="button" variant="destructive" onClick={removeOut}>
+                Remove
+              </Button>
+            )}
+          </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

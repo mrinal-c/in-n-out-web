@@ -1,4 +1,4 @@
-import { addQueryParams } from "../../../redux/utils";
+import { addQueryParams } from "@/redux/utils";
 import { NextResponse } from "next/server";
 
 //TODO: CONVERT COOKIES/FORM API TO ASYNC

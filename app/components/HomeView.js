@@ -9,13 +9,12 @@ import {
 } from "@/components/ui/select";
 import { OutTable } from "@/app/components/OutTable";
 import { OutForm } from "@/app/components/OutForm";
+import { Menu } from "@/app/components/Menu";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 import { getTransactions, addOut } from "@/redux/slices/expensesSlice";
 import { setMonth, setYear } from "@/redux/slices/dateSlice";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-
 
 export const HomeView = () => {
   //hooks
@@ -25,14 +24,16 @@ export const HomeView = () => {
   //redux state
   const tableData = useAppSelector((state) => state.expense.tableData);
   const { month, year } = useAppSelector((state) => state.date);
-
-  //local state
-  const [modalVisible, setModalVisible] = useState(false);
+  const { user, isLoggedIn }= useAppSelector((state) => state.user);
 
   //fetch transactions on page load and when month/year change
   useEffect(() => {
     dispatch(getTransactions());
   }, [month, year]);
+
+  useEffect(() => {
+    if (!isLoggedIn) router.push("/");
+  }, [isLoggedIn])
 
   const handleMonth = (newMonth) => {
     dispatch(setMonth(newMonth));
@@ -65,7 +66,11 @@ export const HomeView = () => {
 
   return (
     <div className="flex flex-col items-center gap-6">
-      <p className="text-3xl font-semibold self-start">Dashboard</p>
+      <div className="flex justify-between items-center w-full">
+        <p className="text-3xl font-semibold">Dashboard</p>
+        <Menu />
+      </div>
+
       <div className="flex gap-6 justify-center">
         <Select defaultValue={month} onValueChange={handleMonth}>
           <SelectTrigger className="w-min">
@@ -102,4 +107,4 @@ export const HomeView = () => {
       </div>
     </div>
   );
-}
+};

@@ -71,9 +71,8 @@ export const addOut = createAsyncThunk(
 export const deleteTransaction = createAsyncThunk(
   "expense/deleteTransaction",
   async (data, thunkAPI) => {
-    const transaction = data.transaction;
     const params = {
-      _id: transaction._id,
+      _id: data._id,
     };
     const url = addQueryParams("/api/transaction", params);
     try {

@@ -24,7 +24,7 @@ export const login = createAsyncThunk("user/login", async (data, thunkAPI) => {
     if (!response.ok) {
       throw new Error(responseData.message);
     }
-
+    console.log(responseData);
     return responseData;
   } catch (err) {
     return thunkAPI.rejectWithValue(err.message);
@@ -54,6 +54,21 @@ export const signup = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk(
+  "user/logout",
+  async (data, thunkAPI) => {
+    try {
+      const response = await fetch("/api/logout");
+
+      if (!response.ok) {
+        throw new Error("Error while logging out");
+      }
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.message);
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState: initialState,
@@ -64,6 +79,11 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(logout.fulfilled, (state, action) => {
+        state.isLoggedIn = false;
+        state.user = {};
+        state.error = null;
+      })
       .addMatcher(isAnyOf(login.rejected, signup.rejected), (state, action) => {
         state.isLoggedIn = false;
         state.error = action.error.message;
@@ -71,6 +91,7 @@ export const userSlice = createSlice({
       .addMatcher(
         isAnyOf(login.fulfilled, signup.fulfilled),
         (state, action) => {
+          console.log(action.payload);
           state.isLoggedIn = true;
           state.user = action.payload;
           state.error = null;
