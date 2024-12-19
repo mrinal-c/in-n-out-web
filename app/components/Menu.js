@@ -16,11 +16,18 @@ import {
 import { Home, LogOut, MenuIcon, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { logout } from "@/redux/slices/userSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useEffect } from "react";
 
 export const Menu = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+
+  const {user, isLoggedIn} = useAppSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!isLoggedIn) router.push("/");
+  }, [isLoggedIn])
 
   return (
     <DropdownMenu>

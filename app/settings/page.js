@@ -1,5 +1,7 @@
 import { Menu } from "@/app/components/Menu";
 import { UserOutTable } from "@/app/components/UserOutTable";
+import { EditOutTableForm } from "@/app/components/EditOutTableForm";
+
 
 export default function Settings() {
   return (
@@ -10,6 +12,7 @@ export default function Settings() {
           <Menu />
         </div>
         <UserOutTable className="rounded-md border w-1/2" />
+        <EditOutTableForm />
       </div>
     </div>
   );

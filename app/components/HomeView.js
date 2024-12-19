@@ -24,16 +24,11 @@ export const HomeView = () => {
   //redux state
   const tableData = useAppSelector((state) => state.expense.tableData);
   const { month, year } = useAppSelector((state) => state.date);
-  const { user, isLoggedIn }= useAppSelector((state) => state.user);
 
   //fetch transactions on page load and when month/year change
   useEffect(() => {
     dispatch(getTransactions());
   }, [month, year]);
-
-  useEffect(() => {
-    if (!isLoggedIn) router.push("/");
-  }, [isLoggedIn])
 
   const handleMonth = (newMonth) => {
     dispatch(setMonth(newMonth));

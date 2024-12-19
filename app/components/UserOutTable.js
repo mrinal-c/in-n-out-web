@@ -6,6 +6,17 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import {
   Table,
@@ -16,17 +27,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { updateUserOutTable } from "@/redux/slices/userSlice";
 
 export const UserOutTable = ({ ...props }) => {
   const { user } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const outTable = user.outTable;
   const data = useMemo(() => {
-    return Object.entries(outTable).map(([key, value]) => ({
-      category: key,
-      id: key,
-      tags: value,
+    return outTable.map((row, index) => ({
+      ...row,
+      id: index,
     }));
   }, [outTable]);
+
+  const deleteRow = (index) => {
+    //remove index from outTable array
+    dispatch(updateUserOutTable(outTable.filter((_, i) => i !== index)));
+  };
 
   const columns = [
     {
@@ -38,10 +57,41 @@ export const UserOutTable = ({ ...props }) => {
       header: "Tags",
       cell: ({ cell, row }) => {
         return (
-          <div className="flex flex-wrap gap-2">
-            {cell.getValue("tags").map((tag, index) => (
-              <div className="bg-secondary text-secondary-foreground hover:bg-secondary/80 px-2 py-1 rounded-md" key={index}>{tag}</div>
-            ))}
+          <div className="flex justify-between items-center">
+            <div className="flex flex-wrap gap-2">
+              {cell.getValue("tags").map((tag, index) => (
+                <div
+                  className="bg-secondary text-secondary-foreground hover:bg-secondary/80 px-2 py-1 rounded-md"
+                  key={index}
+                >
+                  {tag}
+                </div>
+              ))}
+            </div>
+
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Trash />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogDescription>
+                  This will permanently remove the category from aggregating
+                  data in your tables.
+                </AlertDialogDescription>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    variant="destructive"
+                    onClick={() => deleteRow(row.original.id)}
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         );
       },
