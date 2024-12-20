@@ -10,27 +10,10 @@ import {
 import { OutForm } from "@/app/components/OutForm.js";
 
 export function OutCard({ out }) {
-  const { date, description, type, amount, payment } = out;
-
-  const filename = (paymentName) => {
-    switch (paymentName) {
-      case "Venmo":
-        return "venmo.png";
-      case "AMEX Card":
-        return "amex.png";
-      case "Citi Card":
-        return "citi.png";
-      case "Ally Card":
-        return "ally.png";
-      case "Cash":
-        return "cash.png";
-      default:
-        return "default.png";
-    }
-  };
+  const { date, description, amount } = out;
 
   return (
-    <Card>
+    <Card className="flex flex-col justify-between">
       <CardHeader>
         <CardTitle>{description}</CardTitle>
         <CardDescription>

@@ -36,6 +36,8 @@ export const UserOutTable = ({ ...props }) => {
   const dispatch = useAppDispatch();
   const outTable = user.outTable;
   const data = useMemo(() => {
+    //if outTable is undefined, return empty array
+    if (!outTable) return [];
     return outTable.map((row, index) => ({
       ...row,
       id: index,

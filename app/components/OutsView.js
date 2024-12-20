@@ -61,7 +61,7 @@ export const OutsView = () => {
           onChange={handleSearch}
         />
       </div>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {filterTransactions().map((transaction) => (
           <OutCard key={transaction._id} out={transaction} />
         ))}
