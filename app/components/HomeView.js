@@ -60,45 +60,50 @@ export const HomeView = () => {
   const years = ["2024"];
 
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col h-full items-center">
       <div className="flex justify-between items-center w-full">
         <p className="text-3xl font-semibold">Dashboard</p>
         <Menu />
       </div>
 
-      <div className="flex gap-6 justify-center">
-        <Select defaultValue={month} onValueChange={handleMonth}>
-          <SelectTrigger className="w-min">
-            <SelectValue>{month}</SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {months.map((month) => (
-              <SelectItem key={month} value={month}>
-                {month}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select defaultValue={year} onValueChange={handleYear}>
-          <SelectTrigger className="w-min">
-            <SelectValue>{year}</SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {years.map((year) => (
-              <SelectItem key={year} value={year}>
-                {year}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <div className="flex flex-col gap-10 w-full mt-12 justify-center items-center">
+        <div className="flex gap-6 justify-center">
+          <Select defaultValue={month} onValueChange={handleMonth}>
+            <SelectTrigger className="w-min">
+              <SelectValue>{month}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {months.map((month) => (
+                <SelectItem key={month} value={month}>
+                  {month}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select defaultValue={year} onValueChange={handleYear}>
+            <SelectTrigger className="w-min">
+              <SelectValue>{year}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {years.map((year) => (
+                <SelectItem key={year} value={year}>
+                  {year}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-      <OutTable tableData={tableData} className="rounded-md border w-1/3" />
+        <OutTable
+          tableData={tableData}
+          className="rounded-md border w-3/4 md:w-1/3"
+        />
 
-      <div className="flex gap-4">
-        <OutForm />
+        <div className="flex gap-4">
+          <OutForm />
 
-        <Button onClick={() => router.push("/view")}>View</Button>
+          <Button onClick={() => router.push("/view")}>View</Button>
+        </div>
       </div>
     </div>
   );

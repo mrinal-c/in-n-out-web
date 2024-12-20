@@ -32,10 +32,20 @@ export function OutTable({ tableData, ...props }) {
     {
       accessorKey: "category",
       header: "Category",
+      cell: ({cell, row}) => {
+        return (
+          <div>{cell.getValue()}</div>
+        )
+      },
     },
     {
       accessorKey: "amount",
       header: "Amount",
+      cell: ({cell, row}) => {
+        return (
+          <div>{cell.getValue()}</div>
+        )
+      },
     },
   ];
 
@@ -70,6 +80,7 @@ export function OutTable({ tableData, ...props }) {
           {table.getRowModel().rows.map((row) => (
             <TableRow
               key={row.id}
+              className={row.original.category === "Total" ? "font-bold bg-gray-200" : ""}
               data-state={row.getIsSelected() && "selected"}
             >
               {row.getVisibleCells().map((cell) => (

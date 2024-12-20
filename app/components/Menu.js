@@ -31,7 +31,7 @@ export const Menu = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="cursor-pointer">
         <MenuIcon />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">

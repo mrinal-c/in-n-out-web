@@ -64,6 +64,7 @@ export const EditOutTableForm = () => {
 
   const onSubmit = (value) => {
     dispatch(updateUserOutTable([...outTable, value]));
+    form.reset();
     setOpen(false);
   };
 
