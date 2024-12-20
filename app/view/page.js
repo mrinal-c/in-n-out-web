@@ -1,13 +1,9 @@
-import { ExpensesView } from "../components/ExpensesView";
-import { addQueryParams } from "../../redux/utils";
-import { Suspense } from "react";
+import { OutsView } from "@/app/components/OutsView";
 
 export default function View() {
   return (
     <div>
-      <Suspense>
-        <ExpensesView/>
-      </Suspense>
+      <OutsView />
     </div>
   );
 }

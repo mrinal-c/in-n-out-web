@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from 'next/headers';
 
+//TODO: CONVERT COOKIES/FORM API TO ASYNC
+
 export async function POST(request) {
   const credentials = await request.json();
   credentials.username = "TEMP";
@@ -19,7 +21,7 @@ export async function POST(request) {
       throw new Error(errorData.message); // Throw a descriptive error
     }
     const { user, token } = await response.json();
-    cookies().set({
+    (await cookies()).set({
       name: 'auth-token',
       value: token,
       maxAge: 3600,

@@ -24,7 +24,6 @@ export const login = createAsyncThunk("user/login", async (data, thunkAPI) => {
     if (!response.ok) {
       throw new Error(responseData.message);
     }
-
     return responseData;
   } catch (err) {
     return thunkAPI.rejectWithValue(err.message);
@@ -54,6 +53,45 @@ export const signup = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk(
+  "user/logout",
+  async (data, thunkAPI) => {
+    try {
+      const response = await fetch("/api/logout");
+
+      if (!response.ok) {
+        throw new Error("Error while logging out");
+      }
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.message);
+    }
+  }
+);
+
+export const updateUserOutTable = createAsyncThunk(
+  "user/updateOutTable",
+  async (data, thunkAPI) => {
+    try {
+      const response = await fetch("/api/user/outTable", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({outTable: data}),
+      });
+
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
+
+      return responseData;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.message);
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState: initialState,
@@ -64,8 +102,21 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addMatcher(isAnyOf(login.rejected, signup.rejected), (state, action) => {
+      .addCase(logout.fulfilled, (state, action) => {
+        console.log("isLoggedIn is false from logout")
         state.isLoggedIn = false;
+        state.user = {};
+        state.error = null;
+      })
+      .addCase(updateUserOutTable.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoggedIn = true;
+        state.error = null;
+      })
+      .addMatcher(isAnyOf(login.rejected, signup.rejected), (state, action) => {
+        console.log("login/signup rejected so no logged in")
+        state.isLoggedIn = false;
+        state.user = {};
         state.error = action.error.message;
       })
       .addMatcher(

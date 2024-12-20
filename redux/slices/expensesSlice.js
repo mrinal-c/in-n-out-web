@@ -30,8 +30,9 @@ export const getTransactions = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Unknown error happened");
       }
-      const data = await response.json();
-      return {transactions: data.transactions, tableData: data.tableData}
+      const { transactions, tableData } = await response.json();
+
+      return {transactions: transactions, tableData: tableData}
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: error });
     }
@@ -41,8 +42,7 @@ export const getTransactions = createAsyncThunk(
 export const addOut = createAsyncThunk(
   "expense/addOut",
   async (data, thunkAPI) => {
-    const transaction = data.transaction;
-    transaction.out = true;
+    const transaction = { ...data, out: true}
     const month = thunkAPI.getState().date.month;
     const year = thunkAPI.getState().date.year;
     const params = {
@@ -71,9 +71,8 @@ export const addOut = createAsyncThunk(
 export const deleteTransaction = createAsyncThunk(
   "expense/deleteTransaction",
   async (data, thunkAPI) => {
-    const transaction = data.transaction;
     const params = {
-      _id: transaction._id,
+      _id: data._id,
     };
     const url = addQueryParams("/api/transaction", params);
     try {
@@ -96,7 +95,7 @@ export const deleteTransaction = createAsyncThunk(
 export const editTransaction = createAsyncThunk(
   "expense/editTransaction",
   async (data, thunkAPI) => {
-    const transaction = data.transaction;
+    const transaction = data;
     const params = {
       _id: transaction._id,
     };

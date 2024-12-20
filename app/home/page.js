@@ -1,9 +1,7 @@
-import { OutView } from "../components/OutView";
+import { HomeView } from "@/app/components/HomeView";
 
 export default function Home() {
   return (
-    <div>
-        <OutView />
-    </div>
+    <HomeView />
   );
 }

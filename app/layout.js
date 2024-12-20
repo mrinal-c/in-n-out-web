@@ -1,14 +1,9 @@
 import { Inter } from "next/font/google";
 import StoreProvider from "@/redux/StoreProvider";
-import { ChakraProvider } from "@chakra-ui/react";
-import {
-  ThemeProvider as MuiThemeProvider,
-  createTheme as createMuiTheme,
-} from "@mui/material/styles";
-import theme from "./theme";
 import React from "react";
+import { Toaster } from "@/components/ui/toaster";
 
-// import "./globals.css";
+import "@/app/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,13 +16,21 @@ export default function RootLayout({ children }) {
   return (
     <React.StrictMode>
       <StoreProvider>
-          <html>
-            <body className={inter.className}>
-              <ChakraProvider theme={theme}>
-                {children}
-              </ChakraProvider>
-            </body>
-          </html>
+        <html>
+          <head>
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            />
+          </head>
+          <body className={inter.className}>
+            <Toaster />
+            <div className="h-screen py-12 px-8 md:px-32">
+            {children}
+            </div>
+            
+          </body>
+        </html>
       </StoreProvider>
     </React.StrictMode>
   );
