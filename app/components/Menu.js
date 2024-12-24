@@ -23,12 +23,6 @@ export const Menu = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const {user, isLoggedIn} = useAppSelector((state) => state.user);
-
-  useEffect(() => {
-    if (!isLoggedIn) router.push("/");
-  }, [isLoggedIn])
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">

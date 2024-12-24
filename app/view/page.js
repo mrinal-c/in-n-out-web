@@ -1,9 +1,9 @@
-import { OutsView } from "@/app/components/OutsView";
+import { TransactionsView } from "@/app/components/TransactionsView";
 
-export default function View() {
+export default function InsView() {
   return (
     <div>
-      <OutsView />
+      <TransactionsView />
     </div>
   );
 }

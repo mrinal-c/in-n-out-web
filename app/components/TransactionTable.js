@@ -17,9 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export function OutTable({ tableData, ...props }) {
-  // const categories = ["Food", "Groceries", "Travel", "Big Ticket", "Personal", "TotalNoBT"];
-
+export function TransactionTable({ tableData, ...props }) {
   const data = useMemo(() => {
     return Object.entries(tableData).map(([key, value]) => ({
       category: key,

@@ -60,7 +60,6 @@ export async function GET(request) {
   let query = {
     month: searchParams.get("month"),
     year: searchParams.get("year"),
-    out: searchParams.get("out"),
   };
   let url = addQueryParams(`${process.env.APP_URL}/api/transaction`, query);
   const token = request.cookies.get("auth-token").value;

@@ -2,9 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addQueryParams } from "../utils";
 
 const initialState = {
-  expenses: [],
-  tableData: {},
-  currentExpense: {},
+  transactions: [],
+  inTableData: {},
+  outTableData: {},
   error: null,
 };
 
@@ -16,7 +16,6 @@ export const getTransactions = createAsyncThunk(
     const params = {
       month: month,
       year: year,
-      out: "true"
     };
     const url = addQueryParams("/api/transaction", params);
     try {
@@ -30,19 +29,19 @@ export const getTransactions = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Unknown error happened");
       }
-      const { transactions, tableData } = await response.json();
+      const transactionData = await response.json();
 
-      return {transactions: transactions, tableData: tableData}
+      return transactionData;
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: error });
     }
   }
 );
 
-export const addOut = createAsyncThunk(
-  "expense/addOut",
+export const addTransaction = createAsyncThunk(
+  "expense/addTransaction",
   async (data, thunkAPI) => {
-    const transaction = { ...data, out: true}
+    const transaction = data;
     const month = thunkAPI.getState().date.month;
     const year = thunkAPI.getState().date.year;
     const params = {
@@ -125,17 +124,18 @@ export const expenseSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getTransactions.fulfilled, (state, action) => {
-        state.tableData = action.payload.tableData;
-        state.expenses = action.payload.transactions.sort((a,b) => new Date(b.date) - new Date(a.date));
+        state.inTableData = action.payload.inTableData;
+        state.outTableData = action.payload.outTableData;
+        state.transactions = action.payload.transactions.sort((a,b) => new Date(b.date) - new Date(a.date));
         state.error = null;
       })
       .addCase(getTransactions.rejected, (state, action) => {
         state.error = action.payload;
       })
-      .addCase(addOut.rejected, (state, action) => {
+      .addCase(addTransaction.rejected, (state, action) => {
         state.error = action.payload.error;
       })
-      .addCase(addOut.fulfilled, (state, action) => {
+      .addCase(addTransaction.fulfilled, (state, action) => {
         state.error = null;
       })
       .addCase(deleteTransaction.rejected, (state, action) => {
