@@ -1,6 +1,6 @@
 "use client";
-import { SignInDialog } from "@/app/components/SignInDialog.js";
-import { SignUpDialog } from "@/app/components/SignUpDialog.js";
+import { SignInDialog } from "@/app/components/landing/SignInDialog";
+import { SignUpDialog } from "@/app/components/landing/SignUpDialog.js";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks.js";
 import { clearError } from "@/redux/slices/userSlice.js";
 import { useEffect, useState } from "react";
@@ -20,7 +20,7 @@ export function Start() {
   //detect an already signed in user
   useEffect(() => {
     if (isLoggedIn) {
-      router.push("/home");
+      router.push("/dashboard");
     }
   }, [isLoggedIn]);
 

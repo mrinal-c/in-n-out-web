@@ -13,7 +13,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Home, LogOut, MenuIcon, Settings } from "lucide-react";
+import { Home, LogOut, MenuIcon, Settings, ArrowDownUpIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { logout } from "@/redux/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -30,9 +30,13 @@ export const Menu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
-          <DropdownMenuItem onSelect={(_) => router.push("/home")}>
+          <DropdownMenuItem onSelect={(_) => router.push("/dashboard")}>
             <Home />
             Dashboard
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={(_) => router.push("/transactions")}>
+            <ArrowDownUpIcon />
+            Transactions
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

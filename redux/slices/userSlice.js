@@ -129,7 +129,6 @@ export const userSlice = createSlice({
       .addCase(loadUser.rejected, (state, action) => {
         state.isLoggedIn = false;
         state.user = {};
-        state.error = action.error.message;
         state.isLoaded = true;
       })
       .addCase(updateUserTable.fulfilled, (state, action) => {

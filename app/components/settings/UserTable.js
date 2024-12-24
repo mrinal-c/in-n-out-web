@@ -71,7 +71,7 @@ export const UserTable = ({ isOut, ...props }) => {
             <div className="flex flex-wrap gap-2">
               {cell.getValue("tags").map((tag, index) => (
                 <div
-                  className="bg-secondary text-secondary-foreground hover:bg-secondary/80 px-2 py-1 rounded-md"
+                  className="bg-gray-200 text-secondary-foreground hover:bg-secondary/80 px-2 py-1 rounded-md"
                   key={index}
                 >
                   {tag}

@@ -1,4 +1,4 @@
-import { TransactionsView } from "@/app/components/TransactionsView";
+import { TransactionsView } from "@/app/components/transactions/TransactionsView";
 
 export default function InsView() {
   return (

@@ -1,6 +1,7 @@
+import { decode } from "@/lib/auth";
 import { addQueryParams } from "@/redux/utils";
 import { NextResponse } from "next/server";
-
+import { cookies } from 'next/headers';
 
 export async function PUT(request) {
   const body = await request.json();
@@ -20,12 +21,23 @@ export async function PUT(request) {
       body: JSON.stringify(body),
     });
     if (response.ok) {
-      const data = await response.json()
-      return NextResponse.json(data);
+      const { token } = await response.json();
+      (await cookies()).set({
+            name: 'auth-token',
+            value: token,
+            maxAge: 3600,
+            path: '/',
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict'
+          });
+      const { user } = decode(token);
+      return NextResponse.json(user);
     } else {
       throw new Error("Failed API call. Redirecting to Login");
     }
   } catch (err) {
+    console.log("error um", )
     return NextResponse.redirect(new URL("/", request.url));
   }
 }

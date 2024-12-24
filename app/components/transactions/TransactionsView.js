@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { TransactionCard } from "@/app/components/TransactionCard";
+import { TransactionCard } from "@/app/components/transactions/TransactionCard";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 import {
   editTransaction,
@@ -18,7 +18,6 @@ export const TransactionsView = () => {
 
   //redux state
   const { transactions } = useAppSelector((state) => state.expense);
-  console.log(transactions);
 
   //local state
   const [searchText, setSearchText] = useState("");
@@ -51,7 +50,7 @@ export const TransactionsView = () => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex gap-4">
-        <Button onClick={() => router.push("/home")}>Home</Button>
+        <Button onClick={() => router.push("/dashboard")}>Home</Button>
         <Input
           placeholder="Filter"
           value={searchText}

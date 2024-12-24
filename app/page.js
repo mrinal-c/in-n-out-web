@@ -1,5 +1,4 @@
-import { Start } from "@/app/components/Start";
-import { cookies } from 'next/headers'
+import { Start } from "@/app/components/landing/Start";
 
 export default function StartPage() {
   return <Start />;

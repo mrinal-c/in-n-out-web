@@ -15,8 +15,8 @@ export const ProtectedRoute = ({ children }) => {
     useEffect(() => {
         if (!isLoaded) {
             dispatch(loadUser());
-        } else if (!isLoggedIn && router.isReady) {
-            router.push("/login");
+        } else if (!isLoggedIn) {
+            router.push("/");
         }
     }, [isLoggedIn, isLoaded, router]);
 
