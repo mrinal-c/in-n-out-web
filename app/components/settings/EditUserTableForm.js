@@ -21,16 +21,17 @@ import {
 } from "@/components/ui/form";
 import { TagInput } from "@/components/ui/tag-input";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
-import { updateUserOutTable } from "@/redux/slices/userSlice";
+import { updateUserTable } from "@/redux/slices/userSlice";
 import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-export const EditOutTableForm = () => {
+export const EditUserTableForm = ({ isOut }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
-  const { outTable } = user;
+  const { outTable, inTable } = user;
+  const table = isOut ? outTable : inTable;
 
   //local state
   const [open, setOpen] = useState(false);
@@ -39,10 +40,9 @@ export const EditOutTableForm = () => {
     category: z
       .string()
       .min(1, { message: "Category cannot be empty" })
-      .refine(
-        (value) => user.outTable.some((entry) => entry.category !== value),
-        { message: "Categories must be unique!" }
-      ),
+      .refine((value) => !table.some((entry) => entry.category === value), {
+        message: "Categories must be unique!",
+      }),
     tags: z
       .array(
         z.string().min(1, "Cannot have empty tag").max(30, "Tag is too long")
@@ -63,7 +63,7 @@ export const EditOutTableForm = () => {
   });
 
   const onSubmit = (value) => {
-    dispatch(updateUserOutTable([...outTable, value]));
+    dispatch(updateUserTable({ table: [...table, value], isOut }));
     form.reset();
     setOpen(false);
   };
@@ -78,7 +78,7 @@ export const EditOutTableForm = () => {
 
         <Form {...form}>
           <form
-            id="form"
+            id={`form-${isOut}`}
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8"
           >
@@ -91,6 +91,7 @@ export const EditOutTableForm = () => {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -119,7 +120,7 @@ export const EditOutTableForm = () => {
         </Form>
         <DialogFooter>
           <div className="flex gap-4">
-            <Button type="submit" form="form">
+            <Button type="submit" form={`form-${isOut}`}>
               Submit
             </Button>
           </div>

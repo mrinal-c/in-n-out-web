@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from 'next/headers';
+import { decode } from "@/lib/auth";
 
 //TODO: CONVERT COOKIES/FORM API TO ASYNC
 
@@ -18,7 +19,7 @@ export async function POST(request) {
       const errorData = await response.json(); // Try to get error details from the backend
       throw new Error(errorData.message); // Throw a descriptive error
     }
-    const { user, token } = await response.json();
+    const { token } = await response.json();
     (await cookies()).set({
       name: 'auth-token',
       value: token,
@@ -28,6 +29,8 @@ export async function POST(request) {
       secure: true,
       sameSite: 'strict'
     });
+
+    const {user} = decode(token);
 
     return NextResponse.json(user);
 

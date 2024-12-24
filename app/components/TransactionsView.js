@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { OutCard } from "@/app/components/OutCard";
+import { TransactionCard } from "@/app/components/TransactionCard";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 import {
   editTransaction,
@@ -11,16 +11,14 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-
-
-export const OutsView = () => {
+export const TransactionsView = () => {
   //hooks
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   //redux state
-  const transactions = useAppSelector((state) => state.expense.expenses);
-  const { isLoggedIn, user } = useAppSelector((state) => state.user);
+  const { transactions } = useAppSelector((state) => state.expense);
+  console.log(transactions);
 
   //local state
   const [searchText, setSearchText] = useState("");
@@ -45,8 +43,7 @@ export const OutsView = () => {
           .includes(searchText.toLowerCase()) ||
         transaction.amount.toString().includes(searchText) ||
         transaction.payment.toLowerCase().includes(searchText.toLowerCase()) ||
-        transaction.date.toLowerCase().includes(searchText.toLowerCase()) ||
-        transaction.type.toLowerCase().includes(searchText.toLowerCase())
+        transaction.date.toLowerCase().includes(searchText.toLowerCase())
       );
     });
   };
@@ -63,7 +60,7 @@ export const OutsView = () => {
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {filterTransactions().map((transaction) => (
-          <OutCard key={transaction._id} out={transaction} />
+          <TransactionCard key={transaction._id} transaction={transaction} />
         ))}
       </div>
     </div>

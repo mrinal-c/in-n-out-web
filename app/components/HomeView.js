@@ -7,8 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { OutTable } from "@/app/components/OutTable";
-import { OutForm } from "@/app/components/OutForm";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TransactionTable } from "@/app/components/TransactionTable";
+import { TransactionForm } from "@/app/components/TransactionForm";
 import { Menu } from "@/app/components/Menu";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
 import { getTransactions, addOut } from "@/redux/slices/expensesSlice";
@@ -22,8 +23,13 @@ export const HomeView = () => {
   const router = useRouter();
 
   //redux state
-  const tableData = useAppSelector((state) => state.expense.tableData);
+  const { outTableData, inTableData } = useAppSelector(
+    (state) => state.expense
+  );
   const { month, year } = useAppSelector((state) => state.date);
+
+  //local state
+  const [tab, setTab] = useState("outs");
 
   //fetch transactions on page load and when month/year change
   useEffect(() => {
@@ -38,9 +44,6 @@ export const HomeView = () => {
     dispatch(setYear(newYear));
   };
 
-  const viewTransactions = () => {
-    router.push("/view");
-  };
 
   const months = [
     "Jan",
@@ -94,13 +97,26 @@ export const HomeView = () => {
           </Select>
         </div>
 
-        <OutTable
-          tableData={tableData}
-          className="rounded-md border w-3/4 md:w-1/3"
-        />
+        <Tabs
+          defaultValue="outs"
+          className="w-3/4 md:w-[400px]"
+          onValueChange={setTab}
+        >
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="outs">Outs</TabsTrigger>
+            <TabsTrigger value="ins">Ins</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="outs">
+            <TransactionTable tableData={outTableData} className="rounded-md border" />
+          </TabsContent>
+          <TabsContent value="ins">
+            <TransactionTable tableData={inTableData} className="rounded-md border" />
+          </TabsContent>
+        </Tabs>
 
         <div className="flex gap-4">
-          <OutForm />
+          <TransactionForm isOut={tab == "outs" ? true : false}/>
 
           <Button onClick={() => router.push("/view")}>View</Button>
         </div>

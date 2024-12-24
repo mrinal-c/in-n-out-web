@@ -29,24 +29,32 @@ import {
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { updateUserOutTable } from "@/redux/slices/userSlice";
+import { updateUserTable } from "@/redux/slices/userSlice";
 
-export const UserOutTable = ({ ...props }) => {
+export const UserTable = ({ isOut, ...props }) => {
   const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  const outTable = user.outTable;
+  const { outTable, inTable } = user;
   const data = useMemo(() => {
     //if outTable is undefined, return empty array
-    if (!outTable) return [];
-    return outTable.map((row, index) => ({
+    let table = isOut ? outTable : inTable;
+    if (!table) return [];
+    return table.map((row, index) => ({
       ...row,
       id: index,
     }));
-  }, [outTable]);
+  }, [outTable, inTable, isOut]);
 
   const deleteRow = (index) => {
-    //remove index from outTable array
-    dispatch(updateUserOutTable(outTable.filter((_, i) => i !== index)));
+    const table = isOut ? outTable : inTable;
+    dispatch(
+      updateUserTable(
+        {
+        table: table.filter((_, i) => i !== index),
+        isOut
+        }
+      )
+    );
   };
 
   const columns = [

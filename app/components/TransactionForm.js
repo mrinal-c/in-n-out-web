@@ -35,7 +35,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { TagInput } from "@/components/ui/tag-input";
 import { CalendarIcon, Edit } from "lucide-react";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/redux/hooks";
-import { addOut, editTransaction, deleteTransaction } from "@/redux/slices/expensesSlice";
+import { addTransaction, editTransaction, deleteTransaction} from "@/redux/slices/expensesSlice";
 import {
   SelectItem,
   Select,
@@ -44,19 +44,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-//constant types and payments arrays
-const types = [
-  "Personal",
-  "Breakfast",
-  "Lunch",
-  "Dinner",
-  "Big Ticket",
-  "Groceries",
-  "Travel",
-];
 const payments = ["Cash", "AMEX Card", "Citi Card", "Ally Card", "Venmo"];
 
-export const OutForm = ({ out }) => {
+export const TransactionForm = ({ transaction, isOut }) => {
   //hooks
   const dispatch = useAppDispatch();
 
@@ -79,8 +69,8 @@ export const OutForm = ({ out }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues:
-      out != null
-        ? { ...out, date: new Date(out.date) }
+      transaction != null
+        ? { ...transaction, date: new Date(transaction.date) }
         : {
             date: new Date(),
             description: "",
@@ -93,25 +83,25 @@ export const OutForm = ({ out }) => {
 
   const onSubmit = (value) => {
     value.date = value.date.toISOString().split("T")[0];
-    if (out != null) {
-      dispatch(editTransaction({ ...value, _id: out._id }));
+    if (transaction != null) {
+      dispatch(editTransaction({ ...value, _id: transaction._id, out: isOut }));
     } else {
-      dispatch(addOut(value));
+      dispatch(addTransaction({...value, out: isOut}));
     }
     setOpen(false);
   };
 
-  const removeOut = (e) => {
+  const removeTransaction = (e) => {
     e.preventDefault();
-    dispatch(deleteTransaction(out));
+    dispatch(deleteTransaction(transaction));
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>{out != null ? <Edit /> : "Add"}</DialogTrigger>
+      <DialogTrigger>{transaction != null ? <Edit /> : "Add"}</DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Add an Out</DialogTitle>
+          <DialogTitle>Add an {isOut ? "Out" : "In"}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -125,10 +115,11 @@ export const OutForm = ({ out }) => {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Date</FormLabel>
-                  <Popover>
+                  <Popover modal={true}>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
+                        type="button"
                           variant={"outline"}
                           className={cn(
                             "w-[240px] pl-3 text-left font-normal",
@@ -180,7 +171,7 @@ export const OutForm = ({ out }) => {
               name="tags"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Topics</FormLabel>
+                  <FormLabel>Tags</FormLabel>
                   <FormControl>
                     <TagInput
                       tags={field.value}
@@ -245,8 +236,8 @@ export const OutForm = ({ out }) => {
             <Button type="submit" form="form">
               Submit
             </Button>
-            {out != null && (
-              <Button type="button" variant="destructive" onClick={removeOut}>
+            {transaction != null && (
+              <Button type="button" variant="destructive" onClick={removeTransaction}>
                 Remove
               </Button>
             )}

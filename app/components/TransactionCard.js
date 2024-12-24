@@ -7,13 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { OutForm } from "@/app/components/OutForm.js";
+import { TransactionForm } from "@/app/components/TransactionForm.js";
 
-export function OutCard({ out }) {
-  const { date, description, amount } = out;
+export function TransactionCard({ transaction }) {
+  const { date, description, amount, out } = transaction;
 
   return (
-    <Card className="flex flex-col justify-between">
+    <Card className={`flex flex-col justify-between ${out ? "" : "border-black border-4 border-solid"}`}>
       <CardHeader>
         <CardTitle>{description}</CardTitle>
         <CardDescription>
@@ -23,7 +23,7 @@ export function OutCard({ out }) {
       <CardContent>
         <div className="flex justify-between">
           <p>${amount}</p>
-          <OutForm out={out} />
+          <TransactionForm transaction={transaction} isOut={out} />
         </div>
       </CardContent>
     </Card>

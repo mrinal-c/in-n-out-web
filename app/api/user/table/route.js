@@ -4,8 +4,11 @@ import { NextResponse } from "next/server";
 
 export async function PUT(request) {
   const body = await request.json();
-  console.log(body);
-  let url = `${process.env.APP_URL}/user/outTable`;
+  const searchParams = request.nextUrl.searchParams;
+  let query = {
+    isOut: searchParams.get("isOut"),
+  };
+  let url = addQueryParams(`${process.env.APP_URL}/user/table`, query);
   const token = request.cookies.get("auth-token").value;
   try {
     let response = await fetch(url, {
