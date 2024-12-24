@@ -4,7 +4,7 @@ import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 
 import "@/app/globals.css";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ProtectedRoute } from "./components/common/ProtectedRoute";
 
 const inter = Inter({ subsets: ["latin"] });
 

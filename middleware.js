@@ -9,5 +9,5 @@ export function middleware(request) {
 }
 
 export const config = {
-    matcher: ['/home', '/view', '/api/transaction', '/settings']
+    matcher: ['/dashboard', '/transactions', '/api/transaction', '/settings']
   }

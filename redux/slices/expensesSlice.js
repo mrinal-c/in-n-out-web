@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { addQueryParams } from "../utils";
 
 const initialState = {
@@ -6,6 +6,7 @@ const initialState = {
   inTableData: {},
   outTableData: {},
   error: null,
+  loading: false,
 };
 
 export const getTransactions = createAsyncThunk(
@@ -24,7 +25,7 @@ export const getTransactions = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include"
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error("Unknown error happened");
@@ -126,7 +127,9 @@ export const expenseSlice = createSlice({
       .addCase(getTransactions.fulfilled, (state, action) => {
         state.inTableData = action.payload.inTableData;
         state.outTableData = action.payload.outTableData;
-        state.transactions = action.payload.transactions.sort((a,b) => new Date(b.date) - new Date(a.date));
+        state.transactions = action.payload.transactions.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
         state.error = null;
       })
       .addCase(getTransactions.rejected, (state, action) => {
@@ -149,7 +152,29 @@ export const expenseSlice = createSlice({
       })
       .addCase(editTransaction.fulfilled, (state, action) => {
         state.error = null;
-      });
+      })
+      .addMatcher(
+        isAnyOf(
+          addTransaction.pending,
+          deleteTransaction.pending,
+          editTransaction.pending,
+          getTransactions.pending
+        ),
+        (state, action) => {
+          state.loading = true;
+        }
+      )
+      .addMatcher(
+        isAnyOf(
+          addTransaction.fulfilled,
+          deleteTransaction.fulfilled,
+          editTransaction.fulfilled,
+          getTransactions.fulfilled
+        ),
+        (state, action) => {
+          state.loading = false;
+        }
+      );
   },
 });
 

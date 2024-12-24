@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TransactionForm } from "@/app/components/TransactionForm.js";
+import { TransactionForm } from "@/app/components/common/TransactionForm.js";
 
 export function TransactionCard({ transaction }) {
   const { date, description, amount, out } = transaction;

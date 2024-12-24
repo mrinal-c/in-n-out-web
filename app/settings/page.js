@@ -1,7 +1,5 @@
-import { Menu } from "@/app/components/Menu";
+import { Menu } from "@/app/components/common/Menu";
 import { EditUserTable } from "@/app/components/settings/EditUserTable";
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Settings() {
   return (

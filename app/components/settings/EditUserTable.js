@@ -10,7 +10,7 @@ export const EditUserTable = () => {
 
   return (
     <div className="flex flex-col gap-6 justify-center">
-      <Tabs defaultValue="outs" className="w-3/4 md:w-[600px]" onValueChange={setTab}>
+      <Tabs defaultValue="outs" className="w-full md:w-[600px]" onValueChange={setTab}>
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="outs">Out Table</TabsTrigger>
           <TabsTrigger value="ins">In Table</TabsTrigger>
