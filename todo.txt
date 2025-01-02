@@ -1,6 +1,9 @@
-- edit functionalitys
-handle errors gracefully
-add loading bars
-- grey out submit button till fields are validated
-spacing in transaction modal
-fix display of expense cells in computer
+- welcome page
+    - beautiful welcome page
+- custom user payments
+- ai integration
+- delete account
+- change password
+- change email
+- search, sort, filter transactions
+- group transactions for trips and events
