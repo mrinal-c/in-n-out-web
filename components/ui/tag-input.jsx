@@ -6,7 +6,7 @@ import { Button } from "./button";
 import { X } from "lucide-react";
 
 const TagInput = React.forwardRef(({ className, inputField, ...props }, ref) => {
-    const { tags, setTags, maxTags, placeholderWhenFull = 'Max tags reached', minLength, maxLength, allowDuplicates = false } = props;
+    const { tags, settags, maxtags, placeholderWhenFull = 'Max tags reached', minLength, maxLength, allowDuplicates = false } = props;
     const [inputValue, setInputValue] = React.useState('');
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
@@ -26,9 +26,9 @@ const TagInput = React.forwardRef(({ className, inputField, ...props }, ref) => 
             if (
                 newTagText &&
                 (allowDuplicates || !tags.some((tag) => tag.text === newTagText)) &&
-                (maxTags === undefined || tags.length < maxTags)
+                (maxtags === undefined || tags.length < maxtags)
             ) {
-                setTags([...tags,newTagText ]);
+                settags([...tags,newTagText ]);
             }
             setInputValue('');
         }
@@ -42,7 +42,7 @@ const TagInput = React.forwardRef(({ className, inputField, ...props }, ref) => 
     const handleTagClick = (e, index) => {
         e.preventDefault();
         console.log('io');
-        setTags(tags.filter((_, i) => i !== index));
+        settags(tags.filter((_, i) => i !== index));
     }
     return (
 

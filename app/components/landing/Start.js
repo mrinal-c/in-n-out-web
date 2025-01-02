@@ -37,8 +37,8 @@ export function Start() {
 
   return (
     <div className="flex flex-col justify-center items-center gap-8 h-screen">
-      <p className="text-7xl font-semibold">
-        Welcome to <span className="bg-green-200 rounded-lg p-1">in-n-out</span>.
+      <p className="text-7xl font-semibold leading-snug text-center">
+        Welcome to <span className="bg-green-200 rounded-lg whitespace-nowrap">in-n-out</span>.
       </p>
 
       <div className="flex gap-3">
@@ -48,28 +48,5 @@ export function Start() {
 
 
     </div>
-    // <Box
-    //   minHeight={"100vh"}
-    //   display={"flex"}
-    //   alignItems={"center"}
-    //   justifyContent={"center"}
-    //   flexDirection={"column"}
-    //   textAlign={"center"}
-    // >
-    //   <Heading size={"4xl"} my={5}>
-    //     <Highlight
-    //       query="in-n-out"
-    //       styles={{ px: "2", py: "1", rounded: "full", bg: "green.100" }}
-    //     >
-    //       Welcome to in-n-out.
-    //     </Highlight>
-    //   </Heading>
-    //   <ButtonGroup>
-    //     <Button onClick={onOpenSignUp}>Sign Up</Button>
-    //     <Button onClick={onOpenLogIn}>Sign In</Button>
-    //   </ButtonGroup>
-    //   <SignUp isOpen={isOpenSignUp} onClose={onCloseSignUp} />
-    //   <SignIn isOpen={isOpenLogIn} onClose={onCloseLogIn} />
-    // </Box>
   );
 }

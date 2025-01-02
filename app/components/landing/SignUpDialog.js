@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -32,6 +33,8 @@ export const SignUpDialog = () => {
 
   //local state
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
 
   //form helpers
   const formSchema = z.object({
@@ -52,19 +55,21 @@ export const SignUpDialog = () => {
   });
 
   const onSubmit = (values) => {
+    setLoading(true);
     dispatch(signup(values));
   };
 
   return (
     <Dialog>
-      <DialogTrigger  className="border-2 border-black rounded-sm px-2 py-1">Sign Up
+      <DialogTrigger className="border-2 border-black rounded-sm px-2 py-1">
+        Sign Up
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Sign Up to In-N-Out</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form id="signup-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
               name="email"
@@ -105,9 +110,19 @@ export const SignUpDialog = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
           </form>
         </Form>
+        <DialogFooter>
+        {loading ? (
+            <Button type="button" disabled>
+              <p className="animate-pulse">Loading...</p>
+            </Button>
+          ) : (
+            <Button type="submit" form="signup-form">
+              Submit
+            </Button>
+          )}
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
