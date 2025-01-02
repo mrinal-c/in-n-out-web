@@ -104,11 +104,11 @@ export const EditUserTableForm = ({ isOut }) => {
                   <FormControl>
                     <TagInput
                       tags={field.value}
-                      setTags={(newTags) => {
+                      settags={(newTags) => {
                         form.setValue("tags", newTags);
                       }}
                       maxLength={30}
-                      maxTags={5}
+                      maxtags={5}
                       inputField={field}
                     ></TagInput>
                   </FormControl>

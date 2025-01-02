@@ -60,7 +60,7 @@ export const DashboardView = () => {
     "Dec",
   ];
 
-  const years = ["2024"];
+  const years = ["2024", "2025"];
 
   if (loading) {
     return (
@@ -101,7 +101,7 @@ export const DashboardView = () => {
 
       <Tabs
         defaultValue="outs"
-        className="w-3/4 md:w-[400px]"
+        className="w-full md:w-[400px]"
         onValueChange={setTab}
       >
         <TabsList className="grid w-full grid-cols-2">

@@ -105,7 +105,7 @@ export const TransactionForm = ({ transaction, isOut }) => {
         </DialogHeader>
         <Form {...form}>
           <form
-            id="form"
+            id="transaction-form"
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8"
           >
@@ -175,11 +175,11 @@ export const TransactionForm = ({ transaction, isOut }) => {
                   <FormControl>
                     <TagInput
                       tags={field.value}
-                      setTags={(newTags) => {
+                      settags={(newTags) => {
                         form.setValue("tags", newTags);
                       }}
                       maxLength={30}
-                      maxTags={5}
+                      maxtags={5}
                       inputField={field}
                     ></TagInput>
                   </FormControl>
@@ -233,7 +233,7 @@ export const TransactionForm = ({ transaction, isOut }) => {
         </Form>
         <DialogFooter>
           <div className="flex gap-4">
-            <Button type="submit" form="form">
+            <Button type="submit" form="transaction-form">
               Submit
             </Button>
             {transaction != null && (
