@@ -44,7 +44,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const payments = ["Cash", "AMEX Card", "Citi Card", "Ally Card", "Venmo", "Venture X"];
+const payments = ["Cash", "AMEX Card", "Citi Card", "Ally Card", "Venmo", "Venture X", "Discover Card"];
 
 export const TransactionForm = ({ transaction, isOut }) => {
   //hooks
