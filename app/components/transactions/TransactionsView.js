@@ -42,7 +42,7 @@ export const TransactionsView = () => {
           .includes(searchText.toLowerCase()) ||
         transaction.amount.toString().includes(searchText) ||
         transaction.payment.toLowerCase().includes(searchText.toLowerCase()) ||
-        transaction.date.toLowerCase().includes(searchText.toLowerCase())
+        transaction.transactionDate.toLowerCase().includes(searchText.toLowerCase())
       );
     });
   };

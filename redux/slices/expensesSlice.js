@@ -128,7 +128,7 @@ export const expenseSlice = createSlice({
         state.inTableData = action.payload.inTableData;
         state.outTableData = action.payload.outTableData;
         state.transactions = action.payload.transactions.sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
+          (a, b) => new Date(b.transactionDate) - new Date(a.transactionDate)
         );
         state.error = null;
       })

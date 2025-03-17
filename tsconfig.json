@@ -31,7 +31,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/components/settings/UserTable.js"  ],
+, "app/components/settings/UserTable.js", "lib/api.js"  ],
   "exclude": [
     "node_modules"
   ],
