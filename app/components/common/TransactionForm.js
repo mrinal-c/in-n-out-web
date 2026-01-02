@@ -138,6 +138,11 @@ export const TransactionForm = ({ transaction, isOut }) => {
     }
   };
 
+  const skipToManualEntry = () => {
+    setHideTexbox(true);
+    setTransactionText("");
+  };
+
   const onOpenChangeHandler = (newOpen) => {
     setOpen(newOpen);
     if (!newOpen) {
@@ -302,9 +307,18 @@ export const TransactionForm = ({ transaction, isOut }) => {
                     <p className="animate-pulse">Loading...</p>
                   </Button>
                 ) : (
-                  <Button onClick={parseTransactionDescription}>
-                    Parse with AI
-                  </Button>
+                  <>
+                    <Button onClick={parseTransactionDescription}>
+                      Parse with AI
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="outline"
+                      onClick={skipToManualEntry}
+                    >
+                      Skip to Manual Entry
+                    </Button>
+                  </>
                 )}
               </>
             ) : (

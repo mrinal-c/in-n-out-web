@@ -60,7 +60,7 @@ export const DashboardView = () => {
     "Dec",
   ];
 
-  const years = ["2024", "2025"];
+  const years = ["2024", "2025", "2026"];
 
   if (loading) {
     return (
